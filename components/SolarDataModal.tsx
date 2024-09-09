@@ -1,4 +1,3 @@
-// components/SolarDataModal.tsx
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from './ui/dialog';
 import { Button } from './ui/button';
 
@@ -14,13 +13,8 @@ type SolarDataModalProps = {
 
 const SolarDataModal: React.FC<SolarDataModalProps> = ({ isOpen, onClose, city, solarData }) => {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="text-black">
-          {city}
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-fit">
         <DialogHeader>
           <DialogTitle>Solar Data for {city}</DialogTitle>
           <DialogDescription>Detailed sunrise, sunset, and twilight information.</DialogDescription>

@@ -1,69 +1,72 @@
-"use client"
+"use client";
 
 // pages/CityListPage.tsx
-import React, { useState } from 'react';
-import SolarDataModal from '../components/SolarDataModal';
-import { scrapeData, SolarData } from '../utils/scraperData';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cities } from "@/utils/cityData";
+import React, { useState } from "react";
 
-type City = {
-  name: string;
-  lat: string;
-  lon: string;
+const getCurrentWeekDates = (): string[] => {
+  const dates: string[] = [];
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  };
+
+  // const today = new Date();
+  const today = new Date();
+  const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+
+  // Calculate the previous Monday
+  const mondayOffset = (currentDay === 0 ? -6 : 1) - currentDay; // If Sunday, go back 6 days, else adjust to the nearest Monday
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + mondayOffset);
+
+  // Generate dates from Monday to Sunday
+  for (let i = 0; i < 7; i++) {
+    const nextDate: Date = new Date(monday);
+    nextDate.setDate(monday.getDate() + i);
+    const formattedDate: string = nextDate.toLocaleDateString("id-ID", options);
+    dates.push(formattedDate);
+  }
+
+  return dates;
 };
 
-const cities: City[] = [
-  { name: 'Kota Sorong', lat: "-0.8811", lon: "131.2875" },
-  { name: 'Raja Ampat', lat: "-0.2345", lon: "130.5066" },
-  { name: 'Teminabuan', lat: "-1.4055", lon: "132.0265" },
-  // Add more cities as needed
-];
-
 const CityListPage: React.FC = () => {
-  const [selectedCity, setSelectedCity] = useState<City | null>(null);
-  const [solarData, setSolarData] = useState<SolarData[]>([]);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleCityClick = async (city: City) => {
-    const data = await scrapeData(city.lat, city.lon);  // Adjust scrapeData to accept lat/lon
-    setSelectedCity(city);
-    setSolarData(data);
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-    setSelectedCity(null);
-  };
+  const dates = getCurrentWeekDates();
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>City</th>
-            <th>Sunrise</th>
-            <th>Sunset</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="mx-auto px-6 py-6">
+      <h1>Sunrise and Sunset Data for Cities</h1>
+      <Table>
+        <TableHeader className="bg-zinc-200">
+          <TableRow>
+            <TableHead className="text-black font-bold">Kota</TableHead>
+            {dates.map((date) => (
+              <TableHead key={date} className="text-black font-bold">
+                {date}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {cities.map((city) => (
-            <tr key={city.name} onClick={() => handleCityClick(city)}>
-              <td className="cursor-pointer text-blue-600">{city.name}</td>
-              <td>06:19</td>  {/* Replace with actual data */}
-              <td>18:24</td>  {/* Replace with actual data */}
-            </tr>
+            <TableRow key={city.name}>
+              <TableCell className="font-medium">{city.name}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-
-      {selectedCity && (
-        <SolarDataModal
-          isOpen={modalOpen}
-          onClose={handleCloseModal}
-          city={selectedCity.name}
-          solarData={solarData}
-        />
-      )}
+        </TableBody>
+      </Table>
     </div>
   );
 };
