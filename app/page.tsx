@@ -1,5 +1,6 @@
 "use client";
 
+import Filter from "@/components/Filter";
 // pages/CityListPage.tsx
 import {
   Table,
@@ -48,6 +49,9 @@ const CityListPage: React.FC = () => {
   return (
     <div className="mx-auto px-6 py-6">
       <h1>Sunrise and Sunset Data for Cities</h1>
+      <div className="my-4">
+        <Filter />
+      </div>
       <Table>
         <TableHeader className="bg-zinc-200">
           <TableRow>
