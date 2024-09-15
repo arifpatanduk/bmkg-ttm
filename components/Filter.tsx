@@ -8,16 +8,23 @@ const Filter: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth());
 
   return (
-    <div className="flex space-x-4">
-      <YearSelect
-        selectedYear={selectedYear}
-        setSelectedYear={setSelectedYear}
-      />
-      <MonthSelect
-        selectedMonth={selectedMonth}
-        setSelectedMonth={setSelectedMonth}
-      />
-      <PeriodSelect selectedYear={selectedYear} selectedMonth={selectedMonth} />
+    <div className="flex flex-row">
+      <div className="basis-1/2">
+        <div className="flex space-x-4">
+          <YearSelect
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+          />
+          <MonthSelect
+            selectedMonth={selectedMonth}
+            setSelectedMonth={setSelectedMonth}
+          />
+          <PeriodSelect
+            selectedYear={selectedYear}
+            selectedMonth={selectedMonth}
+          />
+        </div>
+      </div>
     </div>
   );
 };

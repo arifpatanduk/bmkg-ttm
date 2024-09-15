@@ -17,12 +17,7 @@ const getLastMondayOfPreviousMonth = (year: number, month: number): Date => {
     lastDayOfPreviousMonth.setDate(lastDayOfPreviousMonth.getDate() - 1);
   }
 
-  // Ensure that this Monday is before or equal to the first day of the current month
-  if (lastDayOfPreviousMonth <= firstDayOfMonth) {
-    return lastDayOfPreviousMonth;
-  }
-
-  return firstDayOfMonth; // Default fallback
+  return lastDayOfPreviousMonth; // Return the last Monday found
 };
 
 // Helper function to get all Mondays starting from a specific Monday and continuing into the next weeks
@@ -42,15 +37,38 @@ const getMondaysFromDate = (startDate: Date, selectedMonth: number): Date[] => {
   return mondays;
 };
 
-// Helper function to format the period string
-const getPeriod = (startDate: Date): string => {
+// Updated helper function to format the period and return dates array
+const getPeriod = (
+  startDate: Date
+): { formattedPeriod: string; dates: Date[] } => {
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6); // Week ends on Sunday
-  return `${startDate.getDate()} ${startDate.toLocaleString("default", {
-    month: "short",
-  })} - ${endDate.getDate()} ${endDate.toLocaleString("default", {
+
+  // Collect all dates in the period
+  const dates: Date[] = [];
+  const currentDate = new Date(startDate);
+  while (currentDate <= endDate) {
+    dates.push(new Date(currentDate)); // Add current date to the array
+    currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+  }
+
+  const formattedPeriod = `${startDate.getDate()} ${startDate.toLocaleString(
+    "default",
+    {
+      month: "short",
+    }
+  )} - ${endDate.getDate()} ${endDate.toLocaleString("default", {
     month: "short",
   })}`;
+
+  return { formattedPeriod, dates };
+};
+
+// Helper function to reset a date to midnight for proper comparison
+const resetTimeToMidnight = (date: Date): Date => {
+  const newDate = new Date(date);
+  newDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
+  return newDate;
 };
 
 interface PeriodSelectProps {
@@ -62,7 +80,7 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
   selectedYear,
   selectedMonth,
 }) => {
-  const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("");
 
   // Get the first Monday that may overlap with the selected month
   const startMonday = getLastMondayOfPreviousMonth(selectedYear, selectedMonth);
@@ -74,39 +92,40 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
 
   // Automatically select the current period based on today's date
   useEffect(() => {
-    const today = new Date();
+    const today = resetTimeToMidnight(new Date()); // Reset today to midnight
+
     if (
       today.getMonth() === selectedMonth &&
       today.getFullYear() === selectedYear
     ) {
-      const currentPeriod = periods.find((period) => {
-        const [startDay, , , , endDay] = period.split(" ");
-        const startDate = new Date(
-          selectedYear,
-          selectedMonth,
-          parseInt(startDay)
-        );
-        const endDate = new Date(selectedYear, selectedMonth, parseInt(endDay));
+      const currentPeriod = periods.find((periodObj) => {
+        const { dates } = periodObj;
+        const startDate = resetTimeToMidnight(dates[0]); // Reset start date to midnight
+        const endDate = resetTimeToMidnight(dates[dates.length - 1]); // Reset end date to midnight
+
         return today >= startDate && today <= endDate;
       });
-      setSelectedPeriod(currentPeriod || periods[0]);
+
+      setSelectedPeriod(
+        currentPeriod?.formattedPeriod || periods[0].formattedPeriod
+      );
     } else {
-      setSelectedPeriod(periods[0]);
+      setSelectedPeriod(periods[0].formattedPeriod);
     }
   }, [selectedYear, selectedMonth, periods]);
 
   return (
     <Select
       onValueChange={(value) => setSelectedPeriod(value)}
-      defaultValue={selectedPeriod || ""}
+      defaultValue={selectedPeriod.trim()}
     >
       <SelectTrigger>
         <SelectValue placeholder={selectedPeriod || "Pilih Periode"} />
       </SelectTrigger>
       <SelectContent>
-        {periods.map((period, index) => (
-          <SelectItem key={index} value={period}>
-            {period}
+        {periods.map((periodObj, index) => (
+          <SelectItem key={index} value={periodObj.formattedPeriod}>
+            {periodObj.formattedPeriod}
           </SelectItem>
         ))}
       </SelectContent>
