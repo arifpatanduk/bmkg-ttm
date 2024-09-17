@@ -41,33 +41,56 @@ const CityTable: React.FC<CityTableProps> = ({
   const headers = generateDateHeaders(startDate, endDate);
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Kota</TableHead>
-          {headers.map((date, i) => (
-            <TableHead key={i}>{formatDate(date)}</TableHead>
-          ))}
-          <TableHead>Detail</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {cities.map((city, index) => (
-          <TableRow key={index}>
-            <TableCell className="border p-2">{city.city.name}</TableCell>
-            {city.data.map((day) => (
-              <TableCell className="border p-2" key={day.date}>
-                <div>Sunrise: {day.sunrise}</div>
-                <div>Sunset: {day.sunset}</div>
-              </TableCell>
+    <>
+      <div className="overflow-x-auto shadow-sm sm:rounded-lg">
+        <Table className="min-w-full text-left text-sm text-gray-600">
+          <TableHeader className="bg-gray-50 text-sm">
+            <TableRow>
+              <TableHead
+                scope="col"
+                className="px-6 py-3 text-gray-600 font-bold"
+              >
+                Kota
+              </TableHead>
+              {headers.map((date, i) => (
+                <TableHead
+                  scope="col"
+                  className="px-6 py-3 text-gray-600 font-bold"
+                  key={i}
+                >
+                  {formatDate(date)}
+                </TableHead>
+              ))}
+              <TableHead
+                scope="col"
+                className="px-6 py-3 text-gray-600 font-bold"
+              ></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {cities.map((city, index) => (
+              <TableRow key={index} className="border-b bg-white">
+                <TableCell className="px-6 py-4">{city.city.name}</TableCell>
+                {city.data.map((day) => (
+                  <TableCell className="px-6 py-4" key={day.date}>
+                    <div>Sunrise: {day.sunrise}</div>
+                    <div>Sunset: {day.sunset}</div>
+                  </TableCell>
+                ))}
+                <TableCell className="px-6 py-4 text-right">
+                  <Button
+                    variant="link"
+                    onClick={() => onDetailClick(city.city)}
+                  >
+                    Detail
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-            <TableCell className="border p-2">
-              <Button onClick={() => onDetailClick(city.city)}>Detail</Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 };
 
