@@ -1,3 +1,4 @@
+import { Period } from "@/app/types/global";
 import {
   Select,
   SelectTrigger,
@@ -5,82 +6,26 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  getLastMondayOfPreviousMonth,
+  getMondaysFromDate,
+  getPeriod,
+  resetTimeToMidnight,
+} from "@/lib/helpers";
 import { FC, useState, useEffect } from "react";
-
-// Helper function to find the last Monday of the previous month
-const getLastMondayOfPreviousMonth = (year: number, month: number): Date => {
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfPreviousMonth = new Date(year, month, 0); // Get the last day of the previous month
-
-  // Start from the last day of the previous month and go backwards until you find a Monday
-  while (lastDayOfPreviousMonth.getDay() !== 1) {
-    lastDayOfPreviousMonth.setDate(lastDayOfPreviousMonth.getDate() - 1);
-  }
-
-  return lastDayOfPreviousMonth; // Return the last Monday found
-};
-
-// Helper function to get all Mondays starting from a specific Monday and continuing into the next weeks
-const getMondaysFromDate = (startDate: Date, selectedMonth: number): Date[] => {
-  const mondays: Date[] = [];
-  const currentDate = new Date(startDate);
-
-  // Collect all Mondays while the start date's Monday is still within the selected month
-  while (
-    currentDate.getMonth() === selectedMonth || // Current month matches the selected month
-    (currentDate.getMonth() < selectedMonth && currentDate.getDate() >= 25) // Handles last week starting in previous month
-  ) {
-    mondays.push(new Date(currentDate)); // Add the Monday to the list
-    currentDate.setDate(currentDate.getDate() + 7); // Move to the next Monday
-  }
-
-  return mondays;
-};
-
-// Updated helper function to format the period and return dates array
-const getPeriod = (
-  startDate: Date
-): { formattedPeriod: string; dates: Date[] } => {
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 6); // Week ends on Sunday
-
-  // Collect all dates in the period
-  const dates: Date[] = [];
-  const currentDate = new Date(startDate);
-  while (currentDate <= endDate) {
-    dates.push(new Date(currentDate)); // Add current date to the array
-    currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
-  }
-
-  const formattedPeriod = `${startDate.getDate()} ${startDate.toLocaleString(
-    "default",
-    {
-      month: "short",
-    }
-  )} - ${endDate.getDate()} ${endDate.toLocaleString("default", {
-    month: "short",
-  })}`;
-
-  return { formattedPeriod, dates };
-};
-
-// Helper function to reset a date to midnight for proper comparison
-const resetTimeToMidnight = (date: Date): Date => {
-  const newDate = new Date(date);
-  newDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
-  return newDate;
-};
 
 interface PeriodSelectProps {
   selectedYear: number;
   selectedMonth: number;
+  onPeriodChange: (period: Period) => void; // Callback to handle period change
 }
 
 const PeriodSelect: FC<PeriodSelectProps> = ({
   selectedYear,
   selectedMonth,
+  onPeriodChange,
 }) => {
-  const [selectedPeriod, setSelectedPeriod] = useState<string>("");
+  const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
 
   // Get the first Monday that may overlap with the selected month
   const startMonday = getLastMondayOfPreviousMonth(selectedYear, selectedMonth);
@@ -104,23 +49,35 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
         const endDate = resetTimeToMidnight(dates[dates.length - 1]); // Reset end date to midnight
 
         return today >= startDate && today <= endDate;
-      });
+      }) as Period;
 
-      setSelectedPeriod(
-        currentPeriod?.formattedPeriod || periods[0].formattedPeriod
-      );
+      setSelectedPeriod(currentPeriod || periods[0]);
+      onPeriodChange(currentPeriod || periods[0]); // Automatically pass the selected period to parent
     } else {
-      setSelectedPeriod(periods[0].formattedPeriod);
+      setSelectedPeriod(periods[0]);
+      onPeriodChange(periods[0]);
     }
-  }, [selectedYear, selectedMonth, periods]);
+  }, []);
+
+  console.log("selectedPeriod", selectedPeriod);
 
   return (
     <Select
-      onValueChange={(value) => setSelectedPeriod(value)}
-      defaultValue={selectedPeriod.trim()}
+      onValueChange={(value) => {
+        const selected = periods.find(
+          (periodObj) => periodObj.formattedPeriod === value
+        );
+        setSelectedPeriod(selected || null);
+        if (selected) onPeriodChange(selected);
+      }}
+      defaultValue={selectedPeriod?.formattedPeriod.trim()}
     >
       <SelectTrigger>
-        <SelectValue placeholder={selectedPeriod || "Pilih Periode"} />
+        <SelectValue
+          placeholder={
+            selectedPeriod?.formattedPeriod.trim() || "Pilih Periode"
+          }
+        />
       </SelectTrigger>
       <SelectContent>
         {periods.map((periodObj, index) => (

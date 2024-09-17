@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 const getCurrentYear = () => new Date().getFullYear();
 
