@@ -67,19 +67,29 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-row items-center space-x-4"
-    >
-      <YearSelect selectedYear={selectedYear} setSelectedYear={() => {}} />
-      <MonthSelect selectedMonth={selectedMonth} setSelectedMonth={() => {}} />
-      <PeriodSelect
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        onPeriodChange={onPeriodChange} // Pass the handler to PeriodSelect
-      />
-      <Button type="submit">Tampilkan</Button>
-      <Button onClick={handleClear}>Reset</Button>
+    <form onSubmit={handleSubmit} className="flex flex-row">
+      <div className="basis-7/12">
+        <div className="flex flex-row items-center space-x-4">
+          <YearSelect selectedYear={selectedYear} setSelectedYear={() => {}} />
+          <MonthSelect
+            selectedMonth={selectedMonth}
+            setSelectedMonth={() => {}}
+          />
+          <PeriodSelect
+            selectedYear={selectedYear}
+            selectedMonth={selectedMonth}
+            onPeriodChange={onPeriodChange} // Pass the handler to PeriodSelect
+          />
+          <Button type="submit">Filter</Button>
+          <Button
+            variant="ghost"
+            className="text-red-400 hover:text-red-600 outline-dashed outline-1"
+            onClick={handleClear}
+          >
+            Reset
+          </Button>
+        </div>
+      </div>
     </form>
   );
 };

@@ -1,5 +1,6 @@
-import { Button } from "./ui/button";
 import { City, DetailCitySolarData } from "@/app/types/global";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogHeader } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -9,6 +10,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { scrapeCitySolarData } from "@/lib/api";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
 
 interface ModalCityDetailProps {
@@ -47,60 +54,68 @@ const ModalCityDetail: React.FC<ModalCityDetailProps> = ({
   if (!city) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center">
-      <div className="bg-white p-4 rounded shadow-lg">
-        <h3 className="text-black">{solarDetail?.city.name}</h3>
+    <>
+      <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center">
+        <div className="bg-white p-4 rounded shadow-lg">
+          <h3 className="text-black">{solarDetail?.city.name}</h3>
 
-        <Table>
-          <TableHeader>
-            <TableRow className="text-black">
-              <TableHead className="border p-2">Tanggal</TableHead>
-              <TableHead className="border p-2">Waktu Fajar</TableHead>
-              <TableHead className="border p-2">Waktu Terbit</TableHead>
-              <TableHead className="border p-2">
-                Azimuth saat Terbit (°)
-              </TableHead>
-              <TableHead className="border p-2">Waktu Transit</TableHead>
-              <TableHead className="border p-2">
-                Azimuth saat Transit (°)
-              </TableHead>
-              <TableHead className="border p-2">Waktu Terbenam</TableHead>
-              <TableHead className="border p-2">
-                Azimuth saat Terbenam (°)
-              </TableHead>
-              <TableHead className="border p-2">Waktu Senja</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {city &&
-              solarDetail?.data.map((detail, index) => (
-                <TableRow className="text-black" key={index}>
-                  <TableCell className="border p-2">{detail.date}</TableCell>
-                  <TableCell className="border p-2">
-                    {detail.beginTwilight}
-                  </TableCell>
-                  <TableCell className="border p-2">{detail.sunrise}</TableCell>
-                  <TableCell className="border p-2">
-                    {detail.riseAzimuth}
-                  </TableCell>
-                  <TableCell className="border p-2">{detail.transit}</TableCell>
-                  <TableCell className="border p-2">
-                    {detail.transitAzimuth}
-                  </TableCell>
-                  <TableCell className="border p-2">{detail.sunset}</TableCell>
-                  <TableCell className="border p-2">
-                    {detail.setAzimuth}
-                  </TableCell>
-                  <TableCell className="border p-2">
-                    {detail.endTwilight}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <Button onClick={onClose}>Close</Button>
+          <Table>
+            <TableHeader>
+              <TableRow className="text-black">
+                <TableHead className="border p-2">Tanggal</TableHead>
+                <TableHead className="border p-2">Waktu Fajar</TableHead>
+                <TableHead className="border p-2">Waktu Terbit</TableHead>
+                <TableHead className="border p-2">
+                  Azimuth saat Terbit (°)
+                </TableHead>
+                <TableHead className="border p-2">Waktu Transit</TableHead>
+                <TableHead className="border p-2">
+                  Azimuth saat Transit (°)
+                </TableHead>
+                <TableHead className="border p-2">Waktu Terbenam</TableHead>
+                <TableHead className="border p-2">
+                  Azimuth saat Terbenam (°)
+                </TableHead>
+                <TableHead className="border p-2">Waktu Senja</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {city &&
+                solarDetail?.data.map((detail, index) => (
+                  <TableRow className="text-black" key={index}>
+                    <TableCell className="border p-2">{detail.date}</TableCell>
+                    <TableCell className="border p-2">
+                      {detail.beginTwilight}
+                    </TableCell>
+                    <TableCell className="border p-2">
+                      {detail.sunrise}
+                    </TableCell>
+                    <TableCell className="border p-2">
+                      {detail.riseAzimuth}
+                    </TableCell>
+                    <TableCell className="border p-2">
+                      {detail.transit}
+                    </TableCell>
+                    <TableCell className="border p-2">
+                      {detail.transitAzimuth}
+                    </TableCell>
+                    <TableCell className="border p-2">
+                      {detail.sunset}
+                    </TableCell>
+                    <TableCell className="border p-2">
+                      {detail.setAzimuth}
+                    </TableCell>
+                    <TableCell className="border p-2">
+                      {detail.endTwilight}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <Button onClick={onClose}>Close</Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

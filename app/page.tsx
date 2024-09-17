@@ -4,9 +4,24 @@ import { City, CitySolarData } from "@/app/types/global";
 import CityTable from "@/components/CityTable";
 import Filter from "@/components/Filter";
 import ModalCityDetail from "@/components/ModalCityDetail";
+import TableLoading from "@/components/TableLoading";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { scrapeCitySolarData } from "@/lib/api";
 import { cities } from "@/lib/cityData";
-import { getFormattedDate, getPeriod, getPreviousMonday } from "@/lib/helpers";
+import {
+  generateDateHeaders,
+  getFormattedDate,
+  getPeriod,
+  getPreviousMonday,
+} from "@/lib/helpers";
+import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 const Home: React.FC = () => {
@@ -56,18 +71,42 @@ const Home: React.FC = () => {
     loadScraping(); // Fetch all data without filter
   };
 
+  const headers = generateDateHeaders(startDate, endDate);
+
   return (
-    <div className="containter mx-auto p-6">
+    <div className="containter mx-auto py-6 px-8">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+        <div className="flex items-center mb-4 md:mb-0">
+          <Image
+            src="https://cdn.bmkg.go.id/Web/Logo-BMKG-new-242x300.png"
+            alt="BMKG Logo"
+            width={64}
+            height={64}
+            className="mr-4"
+          />
+          <div>
+            <h1 className="text-2xl font-bold">
+              Badan Meteorologi Klimatologi dan Geofisika
+            </h1>
+            <p className="text-sm text-gray-500">
+              Stasiun Geofisika Kelas III Sorong
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="mb-4">
-        <h2 className="text-2xl font-semibold">Sunrise and Sunset Data</h2>
+        <h2 className="text-lg font-semibold text-gray-700">
+          Informasi Terbit Terbenam Matahari
+        </h2>
+      </div>
+      <div className="mb-3">
+        <Filter onClear={handleClear} onFilter={handleFilter} />
       </div>
       {loading ? (
-        <p>Loading data...</p> // Show this while loading
+        <TableLoading />
       ) : (
         <div>
-          <div className="mb-3">
-            <Filter onClear={handleClear} onFilter={handleFilter} />
-          </div>
           <CityTable
             cities={items}
             onDetailClick={setSelectedItem}

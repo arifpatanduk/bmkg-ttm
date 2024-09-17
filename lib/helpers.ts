@@ -70,6 +70,22 @@ const resetTimeToMidnight = (date: Date): Date => {
   return newDate;
 };
 
+const generateDateHeaders = (startDate: Date, endDate: Date) => {
+  const headers = [];
+  const currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    headers.push(new Date(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return headers;
+};
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat("en-GB").format(date); // Forces DD/MM/YYYY format
+};
+
 export {
   getLastMondayOfPreviousMonth,
   getMondaysFromDate,
@@ -78,4 +94,6 @@ export {
   getFormattedPeriod,
   resetTimeToMidnight,
   getPreviousMonday,
+  generateDateHeaders,
+  formatDate,
 };
