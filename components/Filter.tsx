@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 
 interface FilterProps {
-  onFilter: (filters: { startPeriod: string }) => void;
+  onFilter: (filters: { startPeriod: Period }) => void;
   onClear: () => void; // Clear filter function
 }
 
@@ -23,8 +23,8 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
   endDay.setDate(today.getDate() + 6); // Week ends on Sunday
 
   // Get the default periods based on the selected year and month
-  const selectedYear = getCurrentYear();
-  const selectedMonth = getCurrentMonth();
+  const [selectedYear, setSelectedYear] = useState<number>(getCurrentYear());
+  const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth());
   const startMonday = getLastMondayOfPreviousMonth(selectedYear, selectedMonth);
   const periods = getMondaysFromDate(startMonday, selectedMonth).map((monday) =>
     getPeriod(monday)
@@ -45,10 +45,10 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
 
   useEffect(() => {
     // Update the startDate whenever selectedPeriod changes
-    setStartDate(selectedPeriod.startDate);
+    setStartDate(selectedPeriod);
   }, [selectedPeriod]);
 
-  const [startDate, setStartDate] = useState<string>(selectedPeriod.startDate);
+  const [startDate, setStartDate] = useState<Period>(selectedPeriod);
 
   // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -57,7 +57,7 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
   };
 
   const handleClear = () => {
-    setStartDate(""); // Clear startDate
+    setStartDate(selectedPeriod); // Clear startDate
     onClear(); // Trigger the onClear callback to reset data
   };
 
@@ -70,15 +70,18 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
     <form onSubmit={handleSubmit} className="flex flex-row">
       <div className="basis-7/12">
         <div className="flex flex-row items-center space-x-4">
-          <YearSelect selectedYear={selectedYear} setSelectedYear={() => {}} />
+          <YearSelect
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+          />
           <MonthSelect
             selectedMonth={selectedMonth}
-            setSelectedMonth={() => {}}
+            setSelectedMonth={setSelectedMonth}
           />
           <PeriodSelect
             selectedYear={selectedYear}
             selectedMonth={selectedMonth}
-            onPeriodChange={onPeriodChange} // Pass the handler to PeriodSelect
+            onPeriodChange={onPeriodChange}
           />
           <Button type="submit">Filter</Button>
           <Button

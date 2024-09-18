@@ -1,6 +1,6 @@
 "use client";
 
-import { City, CitySolarData } from "@/app/types/global";
+import { City, CitySolarData, Period } from "@/app/types/global";
 import CityTable from "@/components/CityTable";
 import Filter from "@/components/Filter";
 import ModalCityDetail from "@/components/ModalCityDetail";
@@ -62,8 +62,8 @@ const Home: React.FC = () => {
   };
 
   // Handle filter button click
-  const handleFilter = ({ startPeriod }: { startPeriod: string }) => {
-    const date = new Date(startPeriod);
+  const handleFilter = ({ startPeriod }: { startPeriod: Period }) => {
+    const date = new Date(startPeriod.startDate);
     loadScraping(date); // Fetch data based on filter
   };
 
@@ -71,8 +71,6 @@ const Home: React.FC = () => {
   const handleClear = () => {
     loadScraping(); // Fetch all data without filter
   };
-
-  const headers = generateDateHeaders(startDate, endDate);
 
   return (
     <div className="containter mx-auto py-6 px-8">
