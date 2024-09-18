@@ -13,8 +13,6 @@ export async function scrapeCitySolarData(
     const res = await fetch(url);
     const data = await res.text();
 
-    console.log("url", url);
-
     const $ = cheerio.load(data);
     const preText = $("pre").text();
     const lines = preText.split("\n");
