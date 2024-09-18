@@ -36,7 +36,6 @@ const getPreviousMonday = (date: Date): Date => {
   const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Calculate the difference to Monday
   const previousMonday = new Date(date);
   previousMonday.setDate(date.getDate() - diff); // Set the date to the previous Monday
-  console.log("previousMonday", previousMonday);
 
   return previousMonday;
 };
@@ -71,11 +70,17 @@ const resetTimeToMidnight = (date: Date): Date => {
 };
 
 const generateDateHeaders = (startDate: Date, endDate: Date) => {
-  const headers = [];
+  const headers: string[] = [];
   const currentDate = new Date(startDate);
 
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  };
+
   while (currentDate <= endDate) {
-    headers.push(new Date(currentDate));
+    headers.push(currentDate.toLocaleDateString("id-ID", options)); // Format ke "17 Sep 2024"
     currentDate.setDate(currentDate.getDate() + 1);
   }
 

@@ -44,7 +44,7 @@ const CityTable: React.FC<CityTableProps> = ({
                   className="px-6 py-3 text-gray-600 font-bold"
                   key={i}
                 >
-                  {formatDate(date)}
+                  {date}
                 </TableHead>
               ))}
               <TableHead

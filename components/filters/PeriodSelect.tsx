@@ -59,8 +59,6 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
     }
   }, []);
 
-  console.log("selectedPeriod", selectedPeriod);
-
   return (
     <Select
       onValueChange={(value) => {

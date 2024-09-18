@@ -45,13 +45,14 @@ const Home: React.FC = () => {
     setLoading(true); // Start loading
     const scrapedData: CitySolarData[] = [];
     const { dates } = getPeriod(startDate || getPreviousMonday(new Date())); // Get period for headers
-    setStartDate(dates[0]);
+    const firstDate = dates[0];
+    setStartDate(firstDate);
     setEndDate(dates[dates.length - 1]);
 
     for (const city of cities) {
       const scrape = await scrapeCitySolarData(
         city,
-        getFormattedDate(startDate),
+        getFormattedDate(firstDate),
         7
       );
       scrapedData.push(scrape);
