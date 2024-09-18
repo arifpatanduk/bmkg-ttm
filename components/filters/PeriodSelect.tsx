@@ -12,7 +12,7 @@ import {
   getPeriod,
   resetTimeToMidnight,
 } from "@/lib/helpers";
-import { FC, useState, useEffect, useMemo } from "react";
+import { FC, useState, useEffect } from "react";
 
 interface PeriodSelectProps {
   selectedYear: number;
@@ -27,22 +27,18 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
 }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
 
-  // Memoize the periods to prevent recalculating them on every render
-  const periods = useMemo(() => {
-    const startMonday = getLastMondayOfPreviousMonth(
-      selectedYear,
-      selectedMonth
-    );
-    return getMondaysFromDate(startMonday, selectedMonth).map((monday) =>
-      getPeriod(monday)
-    );
-  }, [selectedYear, selectedMonth]);
+  // Get the first Monday that may overlap with the selected month
+  const startMonday = getLastMondayOfPreviousMonth(selectedYear, selectedMonth);
+
+  // Get all Mondays in the selected month starting from that Monday
+  const periods = getMondaysFromDate(startMonday, selectedMonth).map((monday) =>
+    getPeriod(monday)
+  );
 
   // Automatically select the current period based on today's date
   useEffect(() => {
     const today = resetTimeToMidnight(new Date()); // Reset today to midnight
 
-    // If today's date is in the selected month and year, set the current period
     if (
       today.getMonth() === selectedMonth &&
       today.getFullYear() === selectedYear
@@ -55,35 +51,24 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
         return today >= startDate && today <= endDate;
       }) as Period;
 
-      // Only update if the selected period has changed to avoid re-renders
-      if (currentPeriod && currentPeriod !== selectedPeriod) {
-        setSelectedPeriod(currentPeriod);
-        onPeriodChange(currentPeriod);
-      } else if (!selectedPeriod) {
-        // If no period is selected yet, default to the first period
-        setSelectedPeriod(periods[0]);
-        onPeriodChange(periods[0]);
-      }
-    } else if (!selectedPeriod) {
-      // If the current date doesn't fall in the selected year and month, set to the first period
+      setSelectedPeriod(currentPeriod || periods[0]);
+      onPeriodChange(currentPeriod || periods[0]); // Automatically pass the selected period to parent
+    } else {
       setSelectedPeriod(periods[0]);
       onPeriodChange(periods[0]);
     }
-  }, [selectedYear, selectedMonth, periods, selectedPeriod, onPeriodChange]);
+  }, [selectedMonth, selectedYear]);
 
   return (
     <Select
       onValueChange={(value) => {
         const selected = periods.find(
-          (periodObj) => periodObj.formattedPeriod === value
+          (periodObj) => periodObj.startDate == value
         );
-        // Only update if a different period is selected
-        if (selected && selected !== selectedPeriod) {
-          setSelectedPeriod(selected);
-          onPeriodChange(selected);
-        }
+        setSelectedPeriod(selected || null);
+        if (selected) onPeriodChange(selected);
       }}
-      value={selectedPeriod?.formattedPeriod || ""}
+      defaultValue={selectedPeriod?.startDate}
     >
       <SelectTrigger>
         <SelectValue
@@ -92,7 +77,7 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
       </SelectTrigger>
       <SelectContent>
         {periods.map((periodObj, index) => (
-          <SelectItem key={index} value={periodObj.formattedPeriod}>
+          <SelectItem key={index} value={periodObj.startDate}>
             {periodObj.formattedPeriod}
           </SelectItem>
         ))}
