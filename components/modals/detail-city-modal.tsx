@@ -71,7 +71,7 @@ export const DetailCityModal = () => {
               </DialogDescription>
             </div>
             <div className="w-full md:mx-6 mt-3 md:w-auto md:self-end">
-              <DownloadDropdown />
+              {/* <DownloadDropdown /> */}
             </div>
           </div>
         </DialogHeader>

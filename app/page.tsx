@@ -97,7 +97,7 @@ const Home: React.FC = () => {
           <Filter onClear={handleClear} onFilter={handleFilter} />
         </div>
         <div className="w-full md:w-auto md:self-end mb-3">
-          <DownloadDropdown />
+          {/* <DownloadDropdown /> */}
         </div>
       </div>
       {loading ? (
