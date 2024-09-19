@@ -1,6 +1,7 @@
 "use client";
 
 import { DetailCitySolarData } from "@/app/types/global";
+import { DownloadDropdown } from "@/components/DownloadDropdown";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -60,12 +61,19 @@ export const DetailCityModal = () => {
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-7xl">
         <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl font-bold">
-            {solarDetail?.city.name}
-          </DialogTitle>
-          <DialogDescription>
-            {solarDetail?.city.lat}, {solarDetail?.city.lon}
-          </DialogDescription>
+          <div className="flex flex-col md:flex-row md:justify-between">
+            <div className="w-full md:w-auto mb-3 ">
+              <DialogTitle className="text-2xl font-bold">
+                {solarDetail?.city.name}
+              </DialogTitle>
+              <DialogDescription>
+                {solarDetail?.city.lat}, {solarDetail?.city.lon}
+              </DialogDescription>
+            </div>
+            <div className="w-full md:mx-6 mt-3 md:w-auto md:self-end">
+              <DownloadDropdown />
+            </div>
+          </div>
         </DialogHeader>
         <div className="px-6 py-4">
           <div className="overflow-x-auto border sm:rounded-lg">

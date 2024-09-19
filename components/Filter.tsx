@@ -70,7 +70,7 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col md:flex-row">
-      <div className="basis-full md:basis-7/12">
+      <div className="basis-full">
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
           <div className="w-full md:w-auto">
             <YearSelect

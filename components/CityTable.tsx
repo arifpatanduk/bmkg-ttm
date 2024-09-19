@@ -14,7 +14,7 @@ import {
   generateDateHeaders,
   getFormattedDate,
 } from "@/lib/helpers";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { CircleAlert } from "lucide-react";
 
 interface CityTableProps {
   cities: CitySolarData[];
@@ -88,9 +88,9 @@ const CityTable: React.FC<CityTableProps> = ({
               ))
             ) : (
               <TableRow className="border-b bg-white">
-                <TableCell colSpan={8} className="px-6 py-4 text-center">
+                <TableCell colSpan={9} className="px-6 py-4 text-center">
                   <div className="flex justify-center">
-                    <ExclamationCircleIcon className="size-5 text-red-500" />
+                    <CircleAlert className="size-5 text-red-500" />
                     <span className="text-red-500 mx-2">
                       Data not available
                     </span>
