@@ -115,7 +115,7 @@ const Home: React.FC = () => {
           {selectedItem && (
             <ModalCityDetail
               city={selectedItem}
-              startDate={getFormattedDate()}
+              startDate={getFormattedDate(startDate)}
               duration={7}
               onClose={() => setSelectedItem(null)}
             />
