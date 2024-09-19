@@ -17,15 +17,18 @@ import { FC, useState, useEffect } from "react";
 interface PeriodSelectProps {
   selectedYear: number;
   selectedMonth: number;
+  selectedPeriod: Period; // Add selectedPeriod as a prop
   onPeriodChange: (period: Period) => void; // Callback to handle period change
 }
 
 const PeriodSelect: FC<PeriodSelectProps> = ({
   selectedYear,
   selectedMonth,
+  selectedPeriod, // Destructure selectedPeriod
   onPeriodChange,
 }) => {
-  const [selectedPeriod, setSelectedPeriod] = useState<Period | null>(null);
+  const [internalSelectedPeriod, setInternalSelectedPeriod] =
+    useState<Period | null>(selectedPeriod);
 
   // Get the first Monday that may overlap with the selected month
   const startMonday = getLastMondayOfPreviousMonth(selectedYear, selectedMonth);
@@ -51,28 +54,35 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
         return today >= startDate && today <= endDate;
       }) as Period;
 
-      setSelectedPeriod(currentPeriod || periods[0]);
+      setInternalSelectedPeriod(currentPeriod || periods[0]);
       onPeriodChange(currentPeriod || periods[0]); // Automatically pass the selected period to parent
     } else {
-      setSelectedPeriod(periods[0]);
+      setInternalSelectedPeriod(periods[0]);
       onPeriodChange(periods[0]);
     }
   }, [selectedMonth, selectedYear]);
 
+  // Update internal state when selectedPeriod prop changes
+  useEffect(() => {
+    setInternalSelectedPeriod(selectedPeriod);
+  }, [selectedPeriod]);
+
   return (
     <Select
+      value={internalSelectedPeriod?.startDate} // Control the value of Select
       onValueChange={(value) => {
         const selected = periods.find(
           (periodObj) => periodObj.startDate == value
         );
-        setSelectedPeriod(selected || null);
+        setInternalSelectedPeriod(selected || null);
         if (selected) onPeriodChange(selected);
       }}
-      defaultValue={selectedPeriod?.startDate}
     >
       <SelectTrigger>
         <SelectValue
-          placeholder={selectedPeriod?.formattedPeriod || "Pilih Periode"}
+          placeholder={
+            internalSelectedPeriod?.formattedPeriod || "Pilih Periode"
+          }
         />
       </SelectTrigger>
       <SelectContent>
