@@ -93,16 +93,16 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
             />
           </div>
           <div className="flex w-full md:w-auto space-x-4">
-            <Button className="w-1/2 md:w-auto" type="submit">
+            <Button className="w-full md:w-auto" type="submit">
               Filter
             </Button>
-            <Button
+            {/* <Button
               variant="ghost"
               className="w-1/2 md:w-auto text-red-400 hover:text-red-600 outline-dashed outline-1"
               onClick={handleClear}
             >
               Reset
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
