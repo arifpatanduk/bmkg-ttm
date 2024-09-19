@@ -34,7 +34,7 @@ export async function scrapeCitySolarData(
         if (detailed) {
           // Detailed data processing
           (result as DetailCitySolarData).data.push({
-            date: `${columns[0]} ${columns[1]} ${columns[2]}`,
+            date: `${columns[2]} ${columns[1]} ${columns[0]}`,
             sunrise: columns[5],
             sunset: columns[9],
             beginTwilight: columns[4],

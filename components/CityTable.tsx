@@ -8,7 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate, generateDateHeaders } from "@/lib/helpers";
+import { useModal } from "@/hooks/use-modal-store";
+import {
+  formatDate,
+  generateDateHeaders,
+  getFormattedDate,
+} from "@/lib/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 interface CityTableProps {
@@ -24,7 +29,9 @@ const CityTable: React.FC<CityTableProps> = ({
   startDate,
   endDate,
 }) => {
+  const { onOpen } = useModal();
   const headers = generateDateHeaders(startDate, endDate);
+  const stringifyStartDate = getFormattedDate(startDate);
 
   return (
     <>
@@ -67,7 +74,12 @@ const CityTable: React.FC<CityTableProps> = ({
                   <TableCell className="px-6 py-4 text-right">
                     <Button
                       variant="link"
-                      onClick={() => onDetailClick(city.city)}
+                      onClick={() =>
+                        onOpen("detailCityModal", {
+                          city: city.city,
+                          startDate: stringifyStartDate,
+                        })
+                      }
                     >
                       Detail
                     </Button>
