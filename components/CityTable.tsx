@@ -35,7 +35,7 @@ const CityTable: React.FC<CityTableProps> = ({
 
   return (
     <>
-      <div className="overflow-x-auto shadow-sm sm:rounded-lg">
+      <div className="overflow-x-auto border sm:rounded-lg">
         <Table className="min-w-full text-left text-sm text-gray-600">
           <TableHeader className="bg-gray-50 text-sm">
             <TableRow>
