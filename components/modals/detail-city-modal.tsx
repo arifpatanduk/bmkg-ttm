@@ -1,6 +1,15 @@
-import { City, DetailCitySolarData } from "@/app/types/global";
+"use client";
+
+import { DetailCitySolarData } from "@/app/types/global";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -9,28 +18,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useModal } from "@/hooks/use-modal-store";
 import { scrapeCitySolarData } from "@/lib/api";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@radix-ui/react-dialog";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface ModalCityDetailProps {
-  city: City | null;
-  startDate: string;
-  duration: number;
-  onClose: () => void;
-}
+export const DetailCityModal = () => {
+  const { isOpen, onClose, type, data } = useModal();
+  const isModalOpen = isOpen && type == "detailCityModal";
 
-const ModalCityDetail: React.FC<ModalCityDetailProps> = ({
-  city,
-  startDate,
-  duration,
-  onClose,
-}) => {
+  const { city, startDate } = data;
+
   const [solarDetail, setSolarDetail] = useState<DetailCitySolarData | null>(
     null
   );
@@ -40,8 +39,8 @@ const ModalCityDetail: React.FC<ModalCityDetailProps> = ({
       if (city) {
         const detail = (await scrapeCitySolarData(
           city,
-          startDate,
-          duration,
+          startDate || "",
+          7,
           true
         )) as DetailCitySolarData;
         setSolarDetail(detail);
@@ -49,16 +48,23 @@ const ModalCityDetail: React.FC<ModalCityDetailProps> = ({
     };
 
     loadData();
-  }, [city, startDate, duration]);
+  }, [city, startDate]);
 
   if (!city) return null;
 
-  return (
-    <>
-      <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center">
-        <div className="bg-white p-4 rounded shadow-lg">
-          <h3 className="text-black">{solarDetail?.city.name}</h3>
+  const handleClose = () => {
+    onClose();
+  };
 
+  return (
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
+      <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-7xl">
+        <DialogHeader className="pt-8 px-6">
+          <DialogTitle className="text-2xl text-center font-bold">
+            {solarDetail?.city.name}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="px-6 py-4">
           <Table>
             <TableHeader>
               <TableRow className="text-black">
@@ -112,11 +118,8 @@ const ModalCityDetail: React.FC<ModalCityDetailProps> = ({
                 ))}
             </TableBody>
           </Table>
-          <Button onClick={onClose}>Close</Button>
         </div>
-      </div>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 };
-
-export default ModalCityDetail;

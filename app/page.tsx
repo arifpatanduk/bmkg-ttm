@@ -3,7 +3,6 @@
 import { City, CitySolarData, Period } from "@/app/types/global";
 import CityTable from "@/components/CityTable";
 import Filter from "@/components/Filter";
-import ModalCityDetail from "@/components/ModalCityDetail";
 import TableLoading from "@/components/TableLoading";
 import {
   Dialog,
@@ -112,14 +111,6 @@ const Home: React.FC = () => {
             startDate={startDate}
             endDate={endDate}
           />
-          {selectedItem && (
-            <ModalCityDetail
-              city={selectedItem}
-              startDate={getFormattedDate()}
-              duration={7}
-              onClose={() => setSelectedItem(null)}
-            />
-          )}
         </div>
       )}
     </div>
