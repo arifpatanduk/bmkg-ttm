@@ -2,16 +2,9 @@
 
 import { City, CitySolarData, Period } from "@/app/types/global";
 import CityTable from "@/components/CityTable";
+import { DownloadDropdown } from "@/components/DownloadDropdown";
 import Filter from "@/components/Filter";
 import TableLoading from "@/components/TableLoading";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { scrapeCitySolarData } from "@/lib/api";
 import { cities } from "@/lib/cityData";
 import {
@@ -20,6 +13,7 @@ import {
   getPeriod,
   getPreviousMonday,
 } from "@/lib/helpers";
+import { Download, FileText, ImageDown, Sheet } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
@@ -98,8 +92,13 @@ const Home: React.FC = () => {
           Informasi Terbit Terbenam Matahari
         </h2>
       </div>
-      <div className="mb-3">
-        <Filter onClear={handleClear} onFilter={handleFilter} />
+      <div className="flex flex-col md:flex-row md:justify-between">
+        <div className="w-full md:w-auto mb-3 ">
+          <Filter onClear={handleClear} onFilter={handleFilter} />
+        </div>
+        <div className="w-full md:w-auto md:self-end mb-3">
+          {/* <DownloadDropdown /> */}
+        </div>
       </div>
       {loading ? (
         <TableLoading />

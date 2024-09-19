@@ -2,7 +2,6 @@ import { Period } from "@/app/types/global";
 import { MonthSelect, getCurrentMonth } from "@/components/filters/MonthSelect";
 import PeriodSelect from "@/components/filters/PeriodSelect";
 import { YearSelect, getCurrentYear } from "@/components/filters/YearSelect";
-// Make sure Period is imported
 import { Button } from "@/components/ui/button";
 import {
   getPeriod,
@@ -57,7 +56,10 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
   };
 
   const handleClear = () => {
-    setStartDate(selectedPeriod); // Clear startDate
+    setSelectedYear(getCurrentYear()); // Reset selectedYear to currentYear
+    setSelectedMonth(getCurrentMonth()); // Reset selectedMonth to currentMonth
+    setSelectedPeriod(currentPeriod || periods[0]); // Reset selectedPeriod to currentPeriod
+    setStartDate(currentPeriod || periods[0]); // Clear startDate
     onClear(); // Trigger the onClear callback to reset data
   };
 
@@ -67,30 +69,41 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-row">
-      <div className="basis-7/12">
-        <div className="flex flex-row items-center space-x-4">
-          <YearSelect
-            selectedYear={selectedYear}
-            setSelectedYear={setSelectedYear}
-          />
-          <MonthSelect
-            selectedMonth={selectedMonth}
-            setSelectedMonth={setSelectedMonth}
-          />
-          <PeriodSelect
-            selectedYear={selectedYear}
-            selectedMonth={selectedMonth}
-            onPeriodChange={onPeriodChange}
-          />
-          <Button type="submit">Filter</Button>
-          <Button
-            variant="ghost"
-            className="text-red-400 hover:text-red-600 outline-dashed outline-1"
-            onClick={handleClear}
-          >
-            Reset
-          </Button>
+    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row">
+      <div className="basis-full">
+        <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+          <div className="w-full md:w-auto">
+            <YearSelect
+              selectedYear={selectedYear}
+              setSelectedYear={setSelectedYear}
+            />
+          </div>
+          <div className="w-full md:w-auto">
+            <MonthSelect
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
+            />
+          </div>
+          <div className="w-full md:w-auto">
+            <PeriodSelect
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+              selectedPeriod={selectedPeriod}
+              onPeriodChange={onPeriodChange}
+            />
+          </div>
+          <div className="flex w-full md:w-auto space-x-4">
+            <Button className="w-full md:w-auto" type="submit">
+              Filter
+            </Button>
+            {/* <Button
+              variant="ghost"
+              className="w-1/2 md:w-auto text-red-400 hover:text-red-600 outline-dashed outline-1"
+              onClick={handleClear}
+            >
+              Reset
+            </Button> */}
+          </div>
         </div>
       </div>
     </form>
