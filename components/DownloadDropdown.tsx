@@ -1,14 +1,48 @@
+import { CitySolarData } from "@/app/types/global";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getFormattedPeriod } from "@/lib/helpers";
 import { Download, FileText, ImageDown, Sheet } from "lucide-react";
+import { ExportAsExcel, ExportAsPdf } from "react-export-table";
 
-export const DownloadDropdown = () => {
+interface DownloadDropdownProps {
+  headers: string[];
+  cities: CitySolarData[];
+  startDate: Date;
+  endDate: Date;
+}
+
+export const DownloadDropdown = ({
+  headers,
+  cities,
+  startDate,
+  endDate,
+}: DownloadDropdownProps) => {
+  const fileName = `sun-data-${getFormattedPeriod(
+    startDate,
+    endDate
+  )}-${endDate.getFullYear()}`;
+
+  // extract city.name, data.sunrise and data.sunset from cities on each date
+  const datas = cities.map((city) => {
+    // Get the first and last date in the city's data
+    const firstDate = city.data[0]; // First date
+    const lastDate = city.data[city.data.length - 1]; // Last date
+
+    return [
+      city.city.name, // City name
+      `Sunrise: ${firstDate.sunrise} \nSunset: ${firstDate.sunset}`, // Sunrise and sunset of the first date
+      ...city.data
+        .slice(1, -1)
+        .map((day) => `Sunrise: ${day.sunrise} \nSunset: ${day.sunset}`), // Remaining middle dates
+      `Sunrise: ${lastDate.sunrise} \nSunset: ${lastDate.sunset}`, // Sunrise and sunset of the last date
+    ];
+  });
+
   return (
     <div className="w-full md:w-auto md:self-end mb-3">
       <DropdownMenu>
@@ -18,12 +52,38 @@ export const DownloadDropdown = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-full md:w-auto">
           <DropdownMenuItem className="text-red-500">
-            <FileText className="size-3 mr-2" />
-            PDF
+            <ExportAsPdf
+              fileName={fileName.replace(/\s/g, "")}
+              data={datas}
+              headers={["Kota", ...headers]}
+            >
+              {(props) => (
+                <span
+                  className="inline-flex hover:cursor-pointer w-full text-red-500 hover:text-red-700"
+                  {...props}
+                >
+                  <FileText className="size-3 my-auto mr-2" />
+                  PDF
+                </span>
+              )}
+            </ExportAsPdf>
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-green-500">
-            <Sheet className="size-3 mr-2" />
-            Excel
+          <DropdownMenuItem>
+            <ExportAsExcel
+              name={fileName}
+              fileName={fileName.replace(/\s/g, "")}
+              data={datas}
+              headers={["Kota", ...headers]}
+            >
+              {(props) => (
+                <span
+                  className="inline-flex hover:cursor-pointer w-full text-green-500 hover:text-green-700"
+                  {...props}
+                >
+                  <Sheet className="size-3 my-auto mr-2" /> Excel
+                </span>
+              )}
+            </ExportAsExcel>
           </DropdownMenuItem>
           <DropdownMenuItem className="text-blue-500">
             <ImageDown className="size-3 mr-2" />

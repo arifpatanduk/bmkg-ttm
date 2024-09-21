@@ -18,6 +18,7 @@ import { CircleAlert } from "lucide-react";
 
 interface CityTableProps {
   cities: CitySolarData[];
+  headers: string[];
   onDetailClick: (city: City) => void;
   startDate: Date;
   endDate: Date;
@@ -25,12 +26,12 @@ interface CityTableProps {
 
 const CityTable: React.FC<CityTableProps> = ({
   cities,
+  headers,
   onDetailClick,
   startDate,
   endDate,
 }) => {
   const { onOpen } = useModal();
-  const headers = generateDateHeaders(startDate, endDate);
   const stringifyStartDate = getFormattedDate(startDate);
 
   return (

@@ -28,6 +28,8 @@ const Home: React.FC = () => {
   );
   const [endDate, setEndDate] = useState<Date>(new Date());
 
+  const headers = generateDateHeaders(startDate, endDate);
+
   useEffect(() => {
     if (hasFetchedData.current) return;
     loadScraping();
@@ -97,7 +99,12 @@ const Home: React.FC = () => {
           <Filter onClear={handleClear} onFilter={handleFilter} />
         </div>
         <div className="w-full md:w-auto md:self-end mb-3">
-          {/* <DownloadDropdown /> */}
+          <DownloadDropdown
+            startDate={startDate}
+            endDate={endDate}
+            cities={items}
+            headers={headers}
+          />
         </div>
       </div>
       {loading ? (
@@ -106,6 +113,7 @@ const Home: React.FC = () => {
         <div>
           <CityTable
             cities={items}
+            headers={headers}
             onDetailClick={setSelectedItem}
             startDate={startDate}
             endDate={endDate}
