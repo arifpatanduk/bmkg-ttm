@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getFormattedPeriod } from "@/lib/helpers";
+import html2canvas from "html2canvas";
 import { Download, FileText, ImageDown, Sheet } from "lucide-react";
 import { ExportAsExcel, ExportAsPdf } from "react-export-table";
 
@@ -42,6 +43,62 @@ export const DownloadDropdown = ({
       `Sunrise: ${lastDate.sunrise} \nSunset: ${lastDate.sunset}`, // Sunrise and sunset of the last date
     ];
   });
+
+  const handleDownloadImage = async (imageType: "jpg" | "png") => {
+    const element = document.getElementById("city-sun-table");
+    if (!element) {
+      console.error("Element not found");
+      return;
+    }
+
+    // Add bg-transparent class if imageType is png
+    if (imageType === "png") {
+      element.classList.add("bg-transparent");
+
+      // Also apply bg-transparent to table and other inner elements
+      const table = element.querySelector("table");
+      const tableHeaders = element.querySelectorAll("thead");
+      const tableHead = element.querySelectorAll("thead th");
+      const tableRows = element.querySelectorAll("tbody tr");
+
+      if (table) table.classList.add("bg-transparent");
+      tableHeaders.forEach((header) => header.classList.add("bg-transparent"));
+      tableHead.forEach((header) => header.classList.add("bg-transparent"));
+      tableRows.forEach((row) => row.classList.add("bg-transparent"));
+    }
+
+    const canvas = await html2canvas(element, {
+      backgroundColor: null,
+    });
+    const data = canvas.toDataURL(`image/${imageType}`);
+    const link = document.createElement("a");
+
+    link.href = data;
+    link.download = `${fileName.replace(/\s/g, "")}.${imageType}`;
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+
+    // Remove bg-transparent class after download
+    if (imageType === "png") {
+      element.classList.remove("bg-transparent");
+
+      // Also remove bg-transparent from the table and other inner elements
+      const table = element.querySelector("table");
+      const tableHeaders = element.querySelectorAll("thead");
+      const tableHead = element.querySelectorAll("thead th");
+      const tableRows = element.querySelectorAll("tbody tr");
+
+      if (table) table.classList.remove("bg-transparent");
+      tableHeaders.forEach((header) =>
+        header.classList.remove("bg-transparent")
+      );
+      tableHead.forEach((header) => header.classList.remove("bg-transparent"));
+      tableRows.forEach((row) => row.classList.remove("bg-transparent"));
+    }
+  };
 
   return (
     <div className="w-full md:w-auto md:self-end mb-3">
@@ -85,9 +142,25 @@ export const DownloadDropdown = ({
               )}
             </ExportAsExcel>
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-blue-500">
-            <ImageDown className="size-3 mr-2" />
-            JPG
+          <DropdownMenuItem>
+            <span
+              className="inline-flex hover:cursor-pointer w-full text-blue-500 hover:text-blue-700"
+              onClick={(event) => {
+                handleDownloadImage("jpg");
+              }}
+            >
+              <ImageDown className="size-3 my-auto mr-2" /> JPG
+            </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <span
+              className="inline-flex hover:cursor-pointer w-full text-zinc-500 hover:text-zinc-700"
+              onClick={(event) => {
+                handleDownloadImage("png");
+              }}
+            >
+              <ImageDown className="size-3 my-auto mr-2" /> PNG
+            </span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
