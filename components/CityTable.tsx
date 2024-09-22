@@ -51,7 +51,7 @@ const CityTable: React.FC<CityTableProps> = ({
             ))}
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="bg-white">
           {cities[0].data.length > 0 ? (
             cities.map((city, index) => (
               <TableRow key={index} className="border-b">

@@ -1,4 +1,3 @@
-import { CitySolarData, DetailCitySolarData } from "@/app/types/global";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,7 +6,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getFormattedPeriod } from "@/lib/helpers";
 import html2canvas from "html2canvas";
-import { toPng } from "html-to-image";
 import { Download, FileText, ImageDown, Sheet } from "lucide-react";
 import { ExportAsExcel, ExportAsPdf } from "react-export-table";
 
@@ -16,7 +14,7 @@ interface DownloadDropdownProps {
   cityData: any[];
   startDate: Date;
   tableElement: string;
-  elementRef?: any;
+  prefixFile: string;
 }
 
 export const DownloadDropdown = ({
@@ -24,12 +22,12 @@ export const DownloadDropdown = ({
   cityData,
   startDate,
   tableElement,
-  elementRef,
+  prefixFile,
 }: DownloadDropdownProps) => {
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);
 
-  const fileName = `sun-data-${getFormattedPeriod(
+  const fileName = `${prefixFile}-sun-data-${getFormattedPeriod(
     startDate,
     endDate
   )}-${endDate.getFullYear()}`;
@@ -41,19 +39,20 @@ export const DownloadDropdown = ({
       return;
     }
 
+    const table = element.querySelector("table");
+    const tableHeaders = element.querySelectorAll("thead");
+    const tableHead = element.querySelectorAll("thead th");
+    const tableBody = element.querySelectorAll("tbody");
+    const tableRows = element.querySelectorAll("tbody tr");
+
     // Add bg-transparent class if imageType is png
     if (imageType === "png") {
       element.classList.add("bg-transparent");
 
-      // Also apply bg-transparent to table and other inner elements
-      const table = element.querySelector("table");
-      const tableHeaders = element.querySelectorAll("thead");
-      const tableHead = element.querySelectorAll("thead th");
-      const tableRows = element.querySelectorAll("tbody tr");
-
       if (table) table.classList.add("bg-transparent");
       tableHeaders.forEach((header) => header.classList.add("bg-transparent"));
       tableHead.forEach((header) => header.classList.add("bg-transparent"));
+      tableBody.forEach((header) => header.classList.remove("bg-white"));
       tableRows.forEach((row) => row.classList.add("bg-transparent"));
     }
 
@@ -76,18 +75,14 @@ export const DownloadDropdown = ({
     if (imageType === "png") {
       element.classList.remove("bg-transparent");
 
-      // Also remove bg-transparent from the table and other inner elements
-      const table = element.querySelector("table");
-      const tableHeaders = element.querySelectorAll("thead");
-      const tableHead = element.querySelectorAll("thead th");
-      const tableRows = element.querySelectorAll("tbody tr");
-
       if (table) table.classList.remove("bg-transparent");
       tableHeaders.forEach((header) =>
         header.classList.remove("bg-transparent")
       );
       tableHead.forEach((header) => header.classList.remove("bg-transparent"));
       tableRows.forEach((row) => row.classList.remove("bg-transparent"));
+      tableBody.forEach((header) => header.classList.add("bg-white"));
+      tableBody.forEach((header) => header.classList.remove("bg-transparent"));
     }
   };
 

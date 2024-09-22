@@ -14,8 +14,6 @@ import {
   getPeriod,
   getPreviousMonday,
 } from "@/lib/helpers";
-import { Download, FileText, ImageDown, Sheet } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 const Home: React.FC = () => {
@@ -87,8 +85,6 @@ const Home: React.FC = () => {
 
   return (
     <div className="container mx-auto py-6 px-8 mt-20">
-      {" "}
-      {/* mt-16 pushes content down */}
       <Header />
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-700">
@@ -101,6 +97,7 @@ const Home: React.FC = () => {
         </div>
         <div className="w-full md:w-auto md:self-end mb-3">
           <DownloadDropdown
+            prefixFile="city-list"
             tableElement="city-list-table"
             startDate={startDate}
             cityData={datas}

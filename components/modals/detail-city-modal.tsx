@@ -90,14 +90,15 @@ export const DetailCityModal = () => {
           <div className="flex flex-col md:flex-row md:justify-between">
             <div className="w-full md:w-auto mb-3 ">
               <DialogTitle className="text-2xl font-bold">
-                {solarDetail?.city.name}
+                {city.name}
               </DialogTitle>
               <DialogDescription>
-                {solarDetail?.city.lat}, {solarDetail?.city.lon}
+                {city.lat}, {city.lon}
               </DialogDescription>
             </div>
             <div className="w-full md:mx-6 mt-3 md:w-auto md:self-end">
               <DownloadDropdown
+                prefixFile={city.name}
                 tableElement="city-detail-table"
                 startDate={new Date(startDate || "")}
                 cityData={solarDetailArray || []}
@@ -167,10 +168,10 @@ export const DetailCityModal = () => {
                   </TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="bg-white">
                 {city &&
                   solarDetail?.data.map((detail, index) => (
-                    <TableRow key={index} className="border-b bg-white">
+                    <TableRow key={index} className="border-b">
                       <TableCell className="p-3">{detail.date}</TableCell>
                       <TableCell className="p-3 text-center">
                         {detail.beginTwilight}
