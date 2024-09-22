@@ -55,14 +55,6 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
     onFilter({ startPeriod: startDate }); // Pass the selected startDate
   };
 
-  const handleClear = () => {
-    setSelectedYear(getCurrentYear()); // Reset selectedYear to currentYear
-    setSelectedMonth(getCurrentMonth()); // Reset selectedMonth to currentMonth
-    setSelectedPeriod(currentPeriod || periods[0]); // Reset selectedPeriod to currentPeriod
-    setStartDate(currentPeriod || periods[0]); // Clear startDate
-    onClear(); // Trigger the onClear callback to reset data
-  };
-
   // Handle period change from PeriodSelect
   const onPeriodChange = (period: Period) => {
     setSelectedPeriod(period); // Update selected period
@@ -93,15 +85,8 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
           </div>
           <div className="flex w-full md:w-auto space-x-4">
             <Button className="w-full md:w-auto" type="submit">
-              Filter
+              Tampilkan
             </Button>
-            {/* <Button
-              variant="ghost"
-              className="w-1/2 md:w-auto text-red-400 hover:text-red-600 outline-dashed outline-1"
-              onClick={handleClear}
-            >
-              Reset
-            </Button> */}
           </div>
         </div>
       </div>

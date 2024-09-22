@@ -75,19 +75,19 @@ const Home: React.FC = () => {
 
     return [
       city.city.name, // City name
-      `Sunrise: ${firstDate.sunrise} \nSunset: ${firstDate.sunset}`, // Sunrise and sunset of the first date
+      `Terbit: ${firstDate.sunrise} \nTerbenam: ${firstDate.sunset}`, // Sunrise and sunset of the first date
       ...city.data
         .slice(1, -1)
-        .map((day) => `Sunrise: ${day.sunrise} \nSunset: ${day.sunset}`), // Remaining middle dates
-      `Sunrise: ${lastDate.sunrise} \nSunset: ${lastDate.sunset}`, // Sunrise and sunset of the last date
+        .map((day) => `Terbit: ${day.sunrise} \nTerbenam: ${day.sunset}`), // Remaining middle dates
+      `Terbit: ${lastDate.sunrise} \nTerbenam: ${lastDate.sunset}`, // Sunrise and sunset of the last date
     ];
   });
 
   return (
-    <div className="container mx-auto py-6 px-8 mt-20">
+    <div className="container mx-auto py-6 px-2 mt-20">
       <Header />
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-700">
+        <h2 className="text-xl font-semibold text-gray-700">
           Informasi Terbit Terbenam Matahari
         </h2>
       </div>
