@@ -54,8 +54,8 @@ const CityTable: React.FC<CityTableProps> = ({
         <TableBody className="bg-white">
           {cities[0].data.length > 0 ? (
             cities.map((city, index) => (
-              <TableRow key={index} className="border-b">
-                <TableCell className="px-3 py-4 sticky left-0 z-10">
+              <TableRow key={index} className="border-b-2 border-gray-300">
+                <TableCell className="px-3 py-1 sticky left-0 z-10">
                   <p
                     className="text-blue-600 font-bold hover:underline cursor-pointer"
                     onClick={() =>
@@ -69,7 +69,7 @@ const CityTable: React.FC<CityTableProps> = ({
                   </p>
                 </TableCell>
                 {city.data.map((day) => (
-                  <TableCell className="px-3 py-4" key={day.date}>
+                  <TableCell className="px-3 py-1" key={day.date}>
                     <div className="flex flex-col md:flex-row items-start md:space-x-4">
                       <div className="flex flex-col md:flex-row items-start">
                         <div className="flex flex-col items-start my-1">
