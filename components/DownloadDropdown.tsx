@@ -57,6 +57,7 @@ export const DownloadDropdown = ({
     const canvas = await html2canvas(element, {
       backgroundColor: null,
     });
+
     const data = canvas.toDataURL(`image/${imageType}`);
     const link = document.createElement("a");
 
