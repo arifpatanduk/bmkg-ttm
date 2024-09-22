@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { getFormattedPeriod } from "@/lib/helpers";
 import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import { Download, FileText, ImageDown, Sheet } from "lucide-react";
 import { ExportAsExcel, ExportAsPdf } from "react-export-table";
 
@@ -15,6 +16,7 @@ interface DownloadDropdownProps {
   cityData: any[];
   startDate: Date;
   tableElement: string;
+  elementRef?: any;
 }
 
 export const DownloadDropdown = ({
@@ -22,6 +24,7 @@ export const DownloadDropdown = ({
   cityData,
   startDate,
   tableElement,
+  elementRef,
 }: DownloadDropdownProps) => {
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);

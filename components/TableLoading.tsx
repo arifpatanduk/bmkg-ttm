@@ -21,7 +21,6 @@ const TableLoading = () => {
                 <div className="h-4 bg-gray-300 rounded"></div>
               </TableHead>
             ))}
-            <th className="px-6 py-3"></th>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -35,9 +34,6 @@ const TableLoading = () => {
                   <div className="h-4 bg-gray-300 rounded"></div>
                 </TableCell>
               ))}
-              <TableCell className="px-6 py-4 text-right">
-                <div className="h-4 bg-gray-300 rounded"></div>
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>

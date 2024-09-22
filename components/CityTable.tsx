@@ -1,5 +1,4 @@
 import { City, CitySolarData } from "@/app/types/global";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,11 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useModal } from "@/hooks/use-modal-store";
-import {
-  formatDate,
-  generateDateHeaders,
-  getFormattedDate,
-} from "@/lib/helpers";
+import { getFormattedDate } from "@/lib/helpers";
 import { CircleAlert } from "lucide-react";
 
 interface CityTableProps {
@@ -41,14 +36,14 @@ const CityTable: React.FC<CityTableProps> = ({
           <TableRow>
             <TableHead
               scope="col"
-              className="px-6 py-3 text-gray-600 font-bold bg-gray-50"
+              className="px-3 py-3 text-gray-600 font-bold sticky left-0 bg-gray-50 z-10"
             >
               Kota
             </TableHead>
             {headers.map((date, i) => (
               <TableHead
                 scope="col"
-                className="px-6 py-3 text-gray-600 font-bold"
+                className="px-3 py-3 text-gray-600 font-bold"
                 key={i}
               >
                 {date}
@@ -60,9 +55,9 @@ const CityTable: React.FC<CityTableProps> = ({
           {cities[0].data.length > 0 ? (
             cities.map((city, index) => (
               <TableRow key={index} className="border-b">
-                <TableCell className="px-6 py-4">
+                <TableCell className="px-3 py-4 sticky left-0 z-10">
                   <p
-                    className="text-blue-600 hover:underline cursor-pointer"
+                    className="text-blue-600 font-bold hover:underline cursor-pointer"
                     onClick={() =>
                       onOpen("detailCityModal", {
                         city: city.city,
@@ -74,15 +69,16 @@ const CityTable: React.FC<CityTableProps> = ({
                   </p>
                 </TableCell>
                 {city.data.map((day) => (
-                  <TableCell className="px-6 py-4" key={day.date}>
-                    <div className="flex flex-col items-start">
-                      <div className="flex flex-col items-start">
+                  <TableCell className="px-3 py-4" key={day.date}>
+                    <div className="flex flex-col md:flex-row items-start md:space-x-4">
+                      <div className="flex flex-col md:flex-row items-start">
                         <div className="flex flex-col items-start my-1">
                           <span className="text-xs">Terbit</span>
                           <span className="text-base">{day.sunrise}</span>
                         </div>
                       </div>
-                      <div className="flex flex-col items-start">
+                      <div className="hidden md:my-auto md:block h-6 border-l border-gray-300 mx-4"></div>
+                      <div className="flex flex-col md:flex-row items-start">
                         <div className="flex flex-col items-start my-1">
                           <span className="text-xs">Terbenam</span>
                           <span className="text-lg">{day.sunset}</span>
@@ -94,8 +90,8 @@ const CityTable: React.FC<CityTableProps> = ({
               </TableRow>
             ))
           ) : (
-            <TableRow className="border-b bg-white">
-              <TableCell colSpan={9} className="px-6 py-4 text-center">
+            <TableRow className="border-b">
+              <TableCell colSpan={9} className="px-3 py-4 text-center">
                 <div className="flex justify-center">
                   <CircleAlert className="size-5 text-red-500" />
                   <span className="text-red-500 mx-2">Data not available</span>
