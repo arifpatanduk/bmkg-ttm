@@ -37,7 +37,7 @@ const Header = () => {
           />
           {/* Header Text */}
           <div>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-lg font-bold">
               Badan Meteorologi Klimatologi dan Geofisika
             </h1>
             <p className="text-sm text-gray-500">
