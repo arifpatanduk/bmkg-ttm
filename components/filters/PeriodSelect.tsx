@@ -28,7 +28,7 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
   onPeriodChange,
 }) => {
   const [internalSelectedPeriod, setInternalSelectedPeriod] =
-    useState<Period | null>(selectedPeriod);
+    useState<Period>(selectedPeriod);
 
   // Get the first Monday that may overlap with the selected month
   const startMonday = getLastMondayOfPreviousMonth(selectedYear, selectedMonth);
@@ -74,7 +74,7 @@ const PeriodSelect: FC<PeriodSelectProps> = ({
         const selected = periods.find(
           (periodObj) => periodObj.startDate == value
         );
-        setInternalSelectedPeriod(selected || null);
+        setInternalSelectedPeriod(selected || periods[0]);
         if (selected) onPeriodChange(selected);
       }}
     >
