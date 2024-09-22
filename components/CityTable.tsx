@@ -35,13 +35,13 @@ const CityTable: React.FC<CityTableProps> = ({
   const stringifyStartDate = getFormattedDate(startDate);
 
   return (
-    <div id="city-sun-table" className="overflow-x-auto border sm:rounded-lg">
+    <div id="city-list-table" className="overflow-x-auto border sm:rounded-lg">
       <Table className="min-w-full text-left text-sm text-gray-600">
         <TableHeader className="bg-gray-50 text-sm">
           <TableRow>
             <TableHead
               scope="col"
-              className="px-6 py-3 text-gray-600 font-bold"
+              className="px-6 py-3 text-gray-600 font-bold sticky left-0 bg-gray-50 z-10"
             >
               Kota
             </TableHead>
@@ -54,26 +54,15 @@ const CityTable: React.FC<CityTableProps> = ({
                 {date}
               </TableHead>
             ))}
-            <TableHead
-              scope="col"
-              className="px-6 py-3 text-gray-600 font-bold"
-            ></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {cities[0].data.length > 0 ? (
             cities.map((city, index) => (
               <TableRow key={index} className="border-b bg-white">
-                <TableCell className="px-6 py-4">{city.city.name}</TableCell>
-                {city.data.map((day) => (
-                  <TableCell className="px-6 py-4" key={day.date}>
-                    <div>Sunrise: {day.sunrise}</div>
-                    <div>Sunset: {day.sunset}</div>
-                  </TableCell>
-                ))}
-                <TableCell className="px-6 py-4 text-right">
-                  <Button
-                    variant="link"
+                <TableCell className="px-6 py-4 sticky left-0 bg-white z-10">
+                  <p
+                    className="text-blue-600 hover:underline cursor-pointer"
                     onClick={() =>
                       onOpen("detailCityModal", {
                         city: city.city,
@@ -81,9 +70,28 @@ const CityTable: React.FC<CityTableProps> = ({
                       })
                     }
                   >
-                    Detail
-                  </Button>
+                    {city.city.name}
+                  </p>
                 </TableCell>
+                {city.data.map((day) => (
+                  <TableCell className="px-6 py-4" key={day.date}>
+                    <div className="flex flex-col md:flex-row items-start md:space-x-4">
+                      <div className="flex flex-col md:flex-row items-start">
+                        <div className="flex flex-col items-start my-1">
+                          <span className="text-xs">Terbit</span>
+                          <span className="text-base">{day.sunrise}</span>
+                        </div>
+                      </div>
+                      <div className="hidden md:my-auto md:block h-6 border-l border-gray-300 mx-4"></div>
+                      <div className="flex flex-col md:flex-row items-start">
+                        <div className="flex flex-col items-start my-1">
+                          <span className="text-xs">Terbenam</span>
+                          <span className="text-lg">{day.sunset}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                ))}
               </TableRow>
             ))
           ) : (

@@ -1,4 +1,4 @@
-import { CitySolarData } from "@/app/types/global";
+import { CitySolarData, DetailCitySolarData } from "@/app/types/global";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,40 +12,27 @@ import { ExportAsExcel, ExportAsPdf } from "react-export-table";
 
 interface DownloadDropdownProps {
   headers: string[];
-  cities: CitySolarData[];
+  cityData: any[];
   startDate: Date;
-  endDate: Date;
+  tableElement: string;
 }
 
 export const DownloadDropdown = ({
   headers,
-  cities,
+  cityData,
   startDate,
-  endDate,
+  tableElement,
 }: DownloadDropdownProps) => {
+  const endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 6);
+
   const fileName = `sun-data-${getFormattedPeriod(
     startDate,
     endDate
   )}-${endDate.getFullYear()}`;
 
-  // extract city.name, data.sunrise and data.sunset from cities on each date
-  const datas = cities.map((city) => {
-    // Get the first and last date in the city's data
-    const firstDate = city.data[0]; // First date
-    const lastDate = city.data[city.data.length - 1]; // Last date
-
-    return [
-      city.city.name, // City name
-      `Sunrise: ${firstDate.sunrise} \nSunset: ${firstDate.sunset}`, // Sunrise and sunset of the first date
-      ...city.data
-        .slice(1, -1)
-        .map((day) => `Sunrise: ${day.sunrise} \nSunset: ${day.sunset}`), // Remaining middle dates
-      `Sunrise: ${lastDate.sunrise} \nSunset: ${lastDate.sunset}`, // Sunrise and sunset of the last date
-    ];
-  });
-
   const handleDownloadImage = async (imageType: "jpg" | "png") => {
-    const element = document.getElementById("city-sun-table");
+    const element = document.getElementById(tableElement);
     if (!element) {
       console.error("Element not found");
       return;
@@ -111,7 +98,7 @@ export const DownloadDropdown = ({
           <DropdownMenuItem className="text-red-500">
             <ExportAsPdf
               fileName={fileName.replace(/\s/g, "")}
-              data={datas}
+              data={cityData}
               headers={["Kota", ...headers]}
             >
               {(props) => (
@@ -129,7 +116,7 @@ export const DownloadDropdown = ({
             <ExportAsExcel
               name={fileName}
               fileName={fileName.replace(/\s/g, "")}
-              data={datas}
+              data={cityData}
               headers={["Kota", ...headers]}
             >
               {(props) => (

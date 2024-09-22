@@ -4,6 +4,7 @@ import { City, CitySolarData, Period } from "@/app/types/global";
 import CityTable from "@/components/CityTable";
 import { DownloadDropdown } from "@/components/DownloadDropdown";
 import Filter from "@/components/Filter";
+import Header from "@/components/Header";
 import TableLoading from "@/components/TableLoading";
 import { scrapeCitySolarData } from "@/lib/api";
 import { cities } from "@/lib/cityData";
@@ -67,28 +68,28 @@ const Home: React.FC = () => {
     loadScraping(); // Fetch all data without filter
   };
 
-  return (
-    <div className="containter mx-auto py-6 px-8">
-      <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-        <div className="flex items-center mb-4 md:mb-0">
-          <Image
-            src="https://cdn.bmkg.go.id/Web/Logo-BMKG-new-242x300.png"
-            alt="BMKG Logo"
-            width={64}
-            height={64}
-            className="mr-4"
-          />
-          <div>
-            <h1 className="text-2xl font-bold">
-              Badan Meteorologi Klimatologi dan Geofisika
-            </h1>
-            <p className="text-sm text-gray-500">
-              Stasiun Geofisika Kelas III Sorong
-            </p>
-          </div>
-        </div>
-      </div>
+  // for export properties
+  // extract city.name, data.sunrise and data.sunset from cities on each date
+  const datas = items.map((city) => {
+    // Get the first and last date in the city's data
+    const firstDate = city.data[0]; // First date
+    const lastDate = city.data[city.data.length - 1]; // Last date
 
+    return [
+      city.city.name, // City name
+      `Sunrise: ${firstDate.sunrise} \nSunset: ${firstDate.sunset}`, // Sunrise and sunset of the first date
+      ...city.data
+        .slice(1, -1)
+        .map((day) => `Sunrise: ${day.sunrise} \nSunset: ${day.sunset}`), // Remaining middle dates
+      `Sunrise: ${lastDate.sunrise} \nSunset: ${lastDate.sunset}`, // Sunrise and sunset of the last date
+    ];
+  });
+
+  return (
+    <div className="container mx-auto py-6 px-8 mt-20">
+      {" "}
+      {/* mt-16 pushes content down */}
+      <Header />
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-700">
           Informasi Terbit Terbenam Matahari
@@ -100,9 +101,9 @@ const Home: React.FC = () => {
         </div>
         <div className="w-full md:w-auto md:self-end mb-3">
           <DownloadDropdown
+            tableElement="city-list-table"
             startDate={startDate}
-            endDate={endDate}
-            cities={items}
+            cityData={datas}
             headers={headers}
           />
         </div>

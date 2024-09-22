@@ -35,6 +35,18 @@ export const DetailCityModal = () => {
     null
   );
 
+  const detailHeaders = [
+    "Tanggal",
+    "Waktu Fajar",
+    "Waktu Terbit",
+    "Azimuth saat Terbit (°)",
+    "Waktu Transit",
+    "Azimuth saat Transit (°)",
+    "Waktu Terbenam",
+    "Azimuth saat Terbenam (°)",
+    "Waktu Senja",
+  ];
+
   useEffect(() => {
     const loadData = async () => {
       if (city) {
@@ -57,6 +69,20 @@ export const DetailCityModal = () => {
     onClose();
   };
 
+  const solarDetailArray = solarDetail?.data.map((detail) => {
+    return [
+      detail.date,
+      detail.beginTwilight,
+      detail.sunrise,
+      detail.riseAzimuth,
+      detail.transit,
+      detail.transitAzimuth,
+      detail.sunset,
+      detail.setAzimuth,
+      detail.endTwilight,
+    ].join(", ");
+  });
+
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-7xl">
@@ -71,11 +97,16 @@ export const DetailCityModal = () => {
               </DialogDescription>
             </div>
             <div className="w-full md:mx-6 mt-3 md:w-auto md:self-end">
-              {/* <DownloadDropdown /> */}
+              <DownloadDropdown
+                tableElement="city-detail-table"
+                startDate={new Date(startDate || "")}
+                cityData={solarDetailArray || []}
+                headers={detailHeaders}
+              />
             </div>
           </div>
         </DialogHeader>
-        <div className="px-6 py-4">
+        <div id="city-detail-table" className="px-6 py-4">
           <div className="overflow-x-auto border sm:rounded-lg">
             <Table className="min-w-full text-left text-sm text-gray-600">
               <TableHeader className="bg-gray-50 text-sm">
