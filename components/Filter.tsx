@@ -36,7 +36,7 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
     const endDate = resetTimeToMidnight(dates[dates.length - 1]);
 
     return today >= startDate && today <= endDate;
-  });
+  }) as Period;
 
   const [selectedPeriod, setSelectedPeriod] = useState<Period>(
     currentPeriod || periods[0] // Default to the current period or the first period
@@ -88,7 +88,6 @@ const Filter: React.FC<FilterProps> = ({ onFilter, onClear }) => {
             <PeriodSelect
               selectedYear={selectedYear}
               selectedMonth={selectedMonth}
-              selectedPeriod={selectedPeriod}
               onPeriodChange={onPeriodChange}
             />
           </div>
