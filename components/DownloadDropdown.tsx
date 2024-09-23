@@ -27,7 +27,7 @@ export const DownloadDropdown = ({
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);
 
-  const fileName = `${prefixFile}-sun-data-${getFormattedPeriod(
+  const fileName = `${getFormattedPeriod(
     startDate,
     endDate
   )}-${endDate.getFullYear()}`;
@@ -64,7 +64,7 @@ export const DownloadDropdown = ({
     const link = document.createElement("a");
 
     link.href = data;
-    link.download = `${fileName.replace(/\s/g, "")}.${imageType}`;
+    link.download = `${prefixFile}-${fileName.replace(/\s/g, "")}.${imageType}`;
 
     document.body.appendChild(link);
     link.click();
@@ -96,9 +96,9 @@ export const DownloadDropdown = ({
         <DropdownMenuContent className="w-full md:w-auto">
           <DropdownMenuItem className="text-red-500">
             <ExportAsPdf
-              fileName={fileName.replace(/\s/g, "")}
+              fileName={prefixFile + "-" + fileName.replace(/\s/g, "")}
               data={cityData}
-              headers={["Kota", ...headers]}
+              headers={headers}
             >
               {(props) => (
                 <span
@@ -114,9 +114,9 @@ export const DownloadDropdown = ({
           <DropdownMenuItem>
             <ExportAsExcel
               name={fileName}
-              fileName={fileName.replace(/\s/g, "")}
+              fileName={prefixFile + "-" + fileName.replace(/\s/g, "")}
               data={cityData}
-              headers={["Kota", ...headers]}
+              headers={headers}
             >
               {(props) => (
                 <span

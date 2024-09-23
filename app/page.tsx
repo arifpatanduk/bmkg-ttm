@@ -97,11 +97,11 @@ const Home: React.FC = () => {
         </div>
         <div className="w-full md:w-auto md:self-end mb-3">
           <DownloadDropdown
-            prefixFile="city-list"
+            prefixFile="ttm"
             tableElement="city-list-table"
             startDate={startDate}
             cityData={datas}
-            headers={headers}
+            headers={["Kota", ...headers]}
           />
         </div>
       </div>

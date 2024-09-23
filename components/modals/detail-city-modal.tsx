@@ -80,12 +80,12 @@ export const DetailCityModal = () => {
       detail.sunset,
       detail.setAzimuth,
       detail.endTwilight,
-    ].join(", ");
+    ];
   });
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-7xl">
+      <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-6xl">
         <DialogHeader className="pt-8 px-6">
           <div className="flex flex-col md:flex-row md:justify-between">
             <div className="w-full md:w-auto mb-3 ">
