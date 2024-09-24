@@ -82,7 +82,7 @@ const CityTable: React.FC<CityTableProps> = ({
               <TableRow key={index} className="border-b-2 border-gray-300">
                 <TableCell className="px-3 py-1 sticky left-0 z-10 bg-white">
                   <p
-                    className="text-blue-600 font-bold hover:underline cursor-pointer"
+                    className="text-base text-blue-600 font-bold hover:underline cursor-pointer"
                     onClick={() =>
                       onOpen("detailCityModal", {
                         city: city.city,
