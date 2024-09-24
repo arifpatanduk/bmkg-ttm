@@ -27,7 +27,7 @@ export const DownloadDropdown = ({
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + 6);
 
-  const fileName = `${prefixFile}-sun-data-${getFormattedPeriod(
+  const fileName = `${getFormattedPeriod(
     startDate,
     endDate
   )}-${endDate.getFullYear()}`;
@@ -44,6 +44,7 @@ export const DownloadDropdown = ({
     const tableHead = element.querySelectorAll("thead th");
     const tableBody = element.querySelectorAll("tbody");
     const tableRows = element.querySelectorAll("tbody tr");
+    const tableCell = element.querySelectorAll("tbody tr td");
 
     // Add bg-transparent class if imageType is png
     if (imageType === "png") {
@@ -53,6 +54,7 @@ export const DownloadDropdown = ({
       tableHeaders.forEach((header) => header.classList.add("bg-transparent"));
       tableHead.forEach((header) => header.classList.add("bg-transparent"));
       tableBody.forEach((header) => header.classList.remove("bg-white"));
+      tableCell.forEach((header) => header.classList.remove("bg-white"));
       tableRows.forEach((row) => row.classList.add("bg-transparent"));
     }
 
@@ -64,7 +66,7 @@ export const DownloadDropdown = ({
     const link = document.createElement("a");
 
     link.href = data;
-    link.download = `${fileName.replace(/\s/g, "")}.${imageType}`;
+    link.download = `${prefixFile}-${fileName.replace(/\s/g, "")}.${imageType}`;
 
     document.body.appendChild(link);
     link.click();
@@ -82,6 +84,7 @@ export const DownloadDropdown = ({
       tableHead.forEach((header) => header.classList.remove("bg-transparent"));
       tableRows.forEach((row) => row.classList.remove("bg-transparent"));
       tableBody.forEach((header) => header.classList.add("bg-white"));
+      tableCell.forEach((header) => header.classList.add("bg-white"));
       tableBody.forEach((header) => header.classList.remove("bg-transparent"));
     }
   };
@@ -96,9 +99,9 @@ export const DownloadDropdown = ({
         <DropdownMenuContent className="w-full md:w-auto">
           <DropdownMenuItem className="text-red-500">
             <ExportAsPdf
-              fileName={fileName.replace(/\s/g, "")}
+              fileName={prefixFile + "-" + fileName.replace(/\s/g, "")}
               data={cityData}
-              headers={["Kota", ...headers]}
+              headers={headers}
             >
               {(props) => (
                 <span
@@ -114,9 +117,9 @@ export const DownloadDropdown = ({
           <DropdownMenuItem>
             <ExportAsExcel
               name={fileName}
-              fileName={fileName.replace(/\s/g, "")}
+              fileName={prefixFile + "-" + fileName.replace(/\s/g, "")}
               data={cityData}
-              headers={["Kota", ...headers]}
+              headers={headers}
             >
               {(props) => (
                 <span

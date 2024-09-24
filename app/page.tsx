@@ -18,7 +18,7 @@ import { useEffect, useState, useRef } from "react";
 
 const Home: React.FC = () => {
   const [items, setItems] = useState<CitySolarData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [loading, setLoading] = useState<boolean>(true);
   const hasFetchedData = useRef(false); // Prevents effect from running twice
 
   const [selectedItem, setSelectedItem] = useState<City | null>(null);
@@ -97,11 +97,11 @@ const Home: React.FC = () => {
         </div>
         <div className="w-full md:w-auto md:self-end mb-3">
           <DownloadDropdown
-            prefixFile="city-list"
+            prefixFile="ttm"
             tableElement="city-list-table"
             startDate={startDate}
             cityData={datas}
-            headers={headers}
+            headers={["Kota", ...headers]}
           />
         </div>
       </div>

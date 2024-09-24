@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const DetailCityModal = () => {
+  const [loading, setLoading] = useState<boolean>(true);
   const { isOpen, onClose, type, data } = useModal();
   const isModalOpen = isOpen && type == "detailCityModal";
 
@@ -49,6 +50,7 @@ export const DetailCityModal = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true); // Start loading
       if (city) {
         const detail = (await scrapeCitySolarData(
           city,
@@ -58,6 +60,8 @@ export const DetailCityModal = () => {
         )) as DetailCitySolarData;
         setSolarDetail(detail);
       }
+
+      setLoading(false); // End loading
     };
 
     loadData();
@@ -80,12 +84,12 @@ export const DetailCityModal = () => {
       detail.sunset,
       detail.setAzimuth,
       detail.endTwilight,
-    ].join(", ");
+    ];
   });
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-7xl">
+      <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-6xl">
         <DialogHeader className="pt-8 px-6">
           <div className="flex flex-col md:flex-row md:justify-between">
             <div className="w-full md:w-auto mb-3 ">
@@ -169,7 +173,20 @@ export const DetailCityModal = () => {
                 </TableRow>
               </TableHeader>
               <TableBody className="bg-white">
-                {city &&
+                {loading ? (
+                  <>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <TableRow key={index} className="border-b animate-pulse">
+                        {[...Array(9)].map((_, cellIndex) => (
+                          <TableCell key={cellIndex} className="px-6 py-4">
+                            <div className="h-4 bg-gray-300 rounded"></div>
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </>
+                ) : (
+                  city &&
                   solarDetail?.data.map((detail, index) => (
                     <TableRow key={index} className="border-b">
                       <TableCell className="p-3">{detail.date}</TableCell>
@@ -198,7 +215,8 @@ export const DetailCityModal = () => {
                         {detail.endTwilight}
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
