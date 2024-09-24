@@ -18,7 +18,7 @@ import { useEffect, useState, useRef } from "react";
 
 const Home: React.FC = () => {
   const [items, setItems] = useState<CitySolarData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [loading, setLoading] = useState<boolean>(true);
   const hasFetchedData = useRef(false); // Prevents effect from running twice
 
   const [selectedItem, setSelectedItem] = useState<City | null>(null);
