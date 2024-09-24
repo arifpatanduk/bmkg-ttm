@@ -33,29 +33,54 @@ const CityTable: React.FC<CityTableProps> = ({
     <div id="city-list-table" className="overflow-x-auto border sm:rounded-lg">
       <Table className="min-w-full text-left text-sm text-gray-600">
         <TableHeader className="bg-gray-50 text-sm">
+          {/* First row for the dates */}
           <TableRow>
             <TableHead
               scope="col"
               className="px-3 py-3 text-gray-600 font-bold sticky left-0 bg-gray-50 z-10"
+              rowSpan={2}
             >
               Kota
             </TableHead>
             {headers.map((date, i) => (
               <TableHead
                 scope="col"
-                className="px-3 py-3 text-gray-600 font-bold"
+                className="px-3 py-3 text-gray-600 font-bold text-center"
                 key={i}
+                colSpan={2} // Each date column will span two subcolumns
               >
                 {date}
               </TableHead>
             ))}
           </TableRow>
+          {/* Second row for the "Terbit" and "Terbenam" subheaders */}
+          <TableRow>
+            {headers.map((_, i) => (
+              <>
+                <TableHead
+                  scope="col"
+                  className="px-3 py-1 text-gray-500 font-semibold text-center"
+                  key={`terbit-${i}`}
+                >
+                  Terbit
+                </TableHead>
+                <TableHead
+                  scope="col"
+                  className="px-3 py-1 text-gray-500 font-semibold text-center"
+                  key={`terbenam-${i}`}
+                >
+                  Terbenam
+                </TableHead>
+              </>
+            ))}
+          </TableRow>
         </TableHeader>
+
         <TableBody className="bg-white">
           {cities[0].data.length > 0 ? (
             cities.map((city, index) => (
               <TableRow key={index} className="border-b-2 border-gray-300">
-                <TableCell className="px-3 py-1 sticky left-0 z-10">
+                <TableCell className="px-3 py-1 sticky left-0 z-10 bg-white">
                   <p
                     className="text-blue-600 font-bold hover:underline cursor-pointer"
                     onClick={() =>
@@ -69,23 +94,20 @@ const CityTable: React.FC<CityTableProps> = ({
                   </p>
                 </TableCell>
                 {city.data.map((day) => (
-                  <TableCell className="px-3 py-1" key={day.date}>
-                    <div className="flex flex-col md:flex-row items-start md:space-x-4">
-                      <div className="flex flex-col md:flex-row items-start">
-                        <div className="flex flex-col items-start my-1">
-                          <span className="text-xs">Terbit</span>
-                          <span className="text-base">{day.sunrise}</span>
-                        </div>
-                      </div>
-                      <div className="hidden md:my-auto md:block h-6 border-l border-gray-300 mx-4"></div>
-                      <div className="flex flex-col md:flex-row items-start">
-                        <div className="flex flex-col items-start my-1">
-                          <span className="text-xs">Terbenam</span>
-                          <span className="text-lg">{day.sunset}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </TableCell>
+                  <>
+                    <TableCell
+                      className="px-3 py-1 text-center"
+                      key={`terbit-${day.date}`}
+                    >
+                      {day.sunrise}
+                    </TableCell>
+                    <TableCell
+                      className="px-3 py-1 text-center"
+                      key={`terbenam-${day.date}`}
+                    >
+                      {day.sunset}
+                    </TableCell>
+                  </>
                 ))}
               </TableRow>
             ))

@@ -44,6 +44,7 @@ export const DownloadDropdown = ({
     const tableHead = element.querySelectorAll("thead th");
     const tableBody = element.querySelectorAll("tbody");
     const tableRows = element.querySelectorAll("tbody tr");
+    const tableCell = element.querySelectorAll("tbody tr td");
 
     // Add bg-transparent class if imageType is png
     if (imageType === "png") {
@@ -53,6 +54,7 @@ export const DownloadDropdown = ({
       tableHeaders.forEach((header) => header.classList.add("bg-transparent"));
       tableHead.forEach((header) => header.classList.add("bg-transparent"));
       tableBody.forEach((header) => header.classList.remove("bg-white"));
+      tableCell.forEach((header) => header.classList.remove("bg-white"));
       tableRows.forEach((row) => row.classList.add("bg-transparent"));
     }
 
@@ -82,6 +84,7 @@ export const DownloadDropdown = ({
       tableHead.forEach((header) => header.classList.remove("bg-transparent"));
       tableRows.forEach((row) => row.classList.remove("bg-transparent"));
       tableBody.forEach((header) => header.classList.add("bg-white"));
+      tableCell.forEach((header) => header.classList.add("bg-white"));
       tableBody.forEach((header) => header.classList.remove("bg-transparent"));
     }
   };
