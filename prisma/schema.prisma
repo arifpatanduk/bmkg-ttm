@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+
+model City {
+  id String @id @default(uuid())
+  name String
+  lat String
+  lon String
+
+  solarDatas SolarData[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SolarData {
+  id String @id @default(uuid())
+  
+  cityId String
+  city City @relation(fields: [cityId], references: [id], onDelete: Cascade)
+
+  date DateTime 
+  sunrise String
+  sunset String
+  dawn String
+  dusk String
+  transit String
+  transitAzimuth String
+  riseAzimuth String
+  setAzimuth String
+  createdAt DateTime @default(now())
+
+  @@index([cityId])
+}
