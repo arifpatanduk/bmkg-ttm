@@ -30,14 +30,14 @@ const CityTable: React.FC<CityTableProps> = ({
   const stringifyStartDate = getFormattedDate(startDate);
 
   return (
-    <div id="city-list-table" className="overflow-x-auto border sm:rounded-lg">
-      <Table className="min-w-full text-left text-sm text-gray-600">
-        <TableHeader className="bg-gray-50 text-sm">
+    <div id="city-list-table" className="overflow-x-auto border rounded-[12px]">
+      <Table className="min-w-full text-left text-sm text-black">
+        <TableHeader className="bg-gray-100 text-sm">
           {/* First row for the dates */}
           <TableRow>
             <TableHead
               scope="col"
-              className="px-3 py-3 text-gray-600 font-bold sticky left-0 bg-gray-50 z-10"
+              className="px-3 py-3 text-black font-bold sticky left-0 bg-gray-100 z-10"
               rowSpan={2}
             >
               Kota
@@ -45,7 +45,7 @@ const CityTable: React.FC<CityTableProps> = ({
             {headers.map((date, i) => (
               <TableHead
                 scope="col"
-                className="px-3 py-3 text-gray-600 font-bold text-center"
+                className="px-3 py-3 text-black font-bold text-center"
                 key={i}
                 colSpan={2} // Each date column will span two subcolumns
               >
@@ -59,14 +59,14 @@ const CityTable: React.FC<CityTableProps> = ({
               <>
                 <TableHead
                   scope="col"
-                  className="px-3 py-1 text-gray-500 font-semibold text-center"
+                  className="px-3 py-1 text-black font-semibold text-center"
                   key={`terbit-${i}`}
                 >
                   Terbit
                 </TableHead>
                 <TableHead
                   scope="col"
-                  className="px-3 py-1 text-gray-500 font-semibold text-center"
+                  className="px-3 py-1 text-black font-semibold text-center"
                   key={`terbenam-${i}`}
                 >
                   Terbenam
@@ -76,13 +76,16 @@ const CityTable: React.FC<CityTableProps> = ({
           </TableRow>
         </TableHeader>
 
-        <TableBody className="bg-white">
+        <TableBody>
           {cities[0].data.length > 0 ? (
             cities.map((city, index) => (
-              <TableRow key={index} className="border-b-2 border-gray-300">
-                <TableCell className="px-3 py-1 sticky left-0 z-10 bg-white">
+              <TableRow
+                key={index}
+                className="odd:bg-white even:bg-gray-50 hover:bg-gray-200 border-b border-gray-300"
+              >
+                <TableCell className="px-3 py-1 sticky left-0 z-10 bg-white md:bg-transparent">
                   <p
-                    className="text-base text-blue-600 font-bold hover:underline cursor-pointer"
+                    className="text-base text-black font-bold hover:underline cursor-pointer"
                     onClick={() =>
                       onOpen("detailCityModal", {
                         city: city.city,
@@ -96,13 +99,13 @@ const CityTable: React.FC<CityTableProps> = ({
                 {city.data.map((day) => (
                   <>
                     <TableCell
-                      className="px-3 py-1 text-center"
+                      className="px-3 py-1 text-center font-medium"
                       key={`terbit-${day.date}`}
                     >
                       {day.sunrise}
                     </TableCell>
                     <TableCell
-                      className="px-3 py-1 text-center"
+                      className="px-3 py-1 text-center font-medium"
                       key={`terbenam-${day.date}`}
                     >
                       {day.sunset}
