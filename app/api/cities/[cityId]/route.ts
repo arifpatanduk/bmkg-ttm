@@ -1,7 +1,10 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { cityId: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: { cityId: string } }
+) {
   try {
     const city = await db.city.findUnique({
       where: {
