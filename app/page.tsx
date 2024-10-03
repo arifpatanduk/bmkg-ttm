@@ -8,7 +8,6 @@ import Header from "@/components/Header";
 import TableLoading from "@/components/TableLoading";
 import { scrapeCitySolarData } from "@/lib/api";
 import { cities } from "@/lib/cityData";
-import fetchAndSaveSolarData from "@/lib/cron";
 import {
   generateDateHeaders,
   getFormattedDate,
@@ -83,9 +82,6 @@ const Home: React.FC = () => {
       `Terbit: ${lastDate.sunrise} \nTerbenam: ${lastDate.sunset}`, // Sunrise and sunset of the last date
     ];
   });
-
-  // cron job to insert
-  // await fetchAndSaveSolarData();
 
   return (
     <div className="container mx-auto py-6 px-2 mt-20">
