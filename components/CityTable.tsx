@@ -10,7 +10,6 @@ import {
 import { useModal } from "@/hooks/use-modal-store";
 import { getFormattedDate } from "@/lib/helpers";
 import { CircleAlert } from "lucide-react";
-import React from "react";
 
 interface CityTableProps {
   cities: CitySolarData[];
@@ -57,7 +56,7 @@ const CityTable: React.FC<CityTableProps> = ({
           {/* Second row for the "Terbit" and "Terbenam" subheaders */}
           <TableRow>
             {headers.map((_, i) => (
-              <React.Fragment key={i}>
+              <>
                 <TableHead
                   scope="col"
                   className="px-3 py-1 text-black font-semibold text-center"
@@ -72,7 +71,7 @@ const CityTable: React.FC<CityTableProps> = ({
                 >
                   Terbenam
                 </TableHead>
-              </React.Fragment>
+              </>
             ))}
           </TableRow>
         </TableHeader>
@@ -98,14 +97,20 @@ const CityTable: React.FC<CityTableProps> = ({
                   </p>
                 </TableCell>
                 {city.data.map((day) => (
-                  <React.Fragment key={day.date}>
-                    <TableCell className="px-3 py-1 text-center font-medium">
+                  <>
+                    <TableCell
+                      className="px-3 py-1 text-center font-medium"
+                      key={`terbit-${day.date}`}
+                    >
                       {day.sunrise}
                     </TableCell>
-                    <TableCell className="px-3 py-1 text-center font-medium">
+                    <TableCell
+                      className="px-3 py-1 text-center font-medium"
+                      key={`terbenam-${day.date}`}
+                    >
                       {day.sunset}
                     </TableCell>
-                  </React.Fragment>
+                  </>
                 ))}
               </TableRow>
             ))
