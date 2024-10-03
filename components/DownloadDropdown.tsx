@@ -42,6 +42,7 @@ export const DownloadDropdown = ({
     const table = element.querySelector("table");
     const tableHeaders = element.querySelectorAll("thead");
     const tableHead = element.querySelectorAll("thead th");
+    const tableBody = element.querySelectorAll("tbody");
     const tableRows = element.querySelectorAll("tbody tr");
     const tableCell = element.querySelectorAll("tbody tr td");
 
@@ -52,10 +53,9 @@ export const DownloadDropdown = ({
       if (table) table.classList.add("bg-transparent");
       tableHeaders.forEach((header) => header.classList.add("bg-transparent"));
       tableHead.forEach((header) => header.classList.add("bg-transparent"));
-      tableRows.forEach((row) =>
-        row.classList.remove("odd:bg-white", "even:bg-gray-50")
-      );
+      tableBody.forEach((header) => header.classList.remove("bg-white"));
       tableCell.forEach((header) => header.classList.remove("bg-white"));
+      tableRows.forEach((row) => row.classList.add("bg-transparent"));
     }
 
     const canvas = await html2canvas(element, {
@@ -82,9 +82,10 @@ export const DownloadDropdown = ({
         header.classList.remove("bg-transparent")
       );
       tableHead.forEach((header) => header.classList.remove("bg-transparent"));
-      tableRows.forEach((row) =>
-        row.classList.add("odd:bg-white", "even:bg-gray-50")
-      );
+      tableRows.forEach((row) => row.classList.remove("bg-transparent"));
+      tableBody.forEach((header) => header.classList.add("bg-white"));
+      tableCell.forEach((header) => header.classList.add("bg-white"));
+      tableBody.forEach((header) => header.classList.remove("bg-transparent"));
     }
   };
 
