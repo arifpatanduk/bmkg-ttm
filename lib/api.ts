@@ -70,12 +70,23 @@ function processListData(line: string, city: City, result: CitySolarData) {
   }
 }
 
+// Cache object to store results by city and year
+const twilightCache: { [key: string]: any } = {};
+
 export async function getAstronomicalTwilight(
   city: City,
   year: number,
   month: number,
   day: number
 ) {
+  const cacheKey = `${city.name}-${year}`;
+
+  // Check if the result is already in cache
+  if (twilightCache[cacheKey]) {
+    return getDayTime(twilightCache[cacheKey], day, month);
+  }
+
+  // Fetch data if not in cache
   const url = `https://aa.usno.navy.mil/calculated/rstt/year?ID=AA&year=${year}&task=4&lat=${city.lat}&lon=${city.lon}&label=${city.name}&tz=9&tz_sign=1&submit=Get+Data`;
   const res = await fetch(url);
   const data = await res.text();
@@ -85,6 +96,11 @@ export async function getAstronomicalTwilight(
     .split("\n")
     .slice(6, -2)
     .filter((line) => line.trim() !== "");
+
+  // Store result in cache
+  twilightCache[cacheKey] = lines;
+
+  // Extract and return data for the specific day
   return getDayTime(lines, day, month);
 }
 
