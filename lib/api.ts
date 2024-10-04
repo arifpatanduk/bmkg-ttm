@@ -90,8 +90,19 @@ export async function getAstronomicalTwilight(
 
 function getDayTime(data: string[], day: number, month: number) {
   const dayRow = data[day + 2];
-  const dayData = dayRow.split(/\s+/).filter(Boolean);
-  const beginIndex = month * 2 + 1;
+  const regex = /\d{4}|\s{5}/g;
+  const matches = dayRow.match(regex) || [];
+  let dayData: string[] = [];
+
+  matches.forEach((match) => {
+    if (match.startsWith(" ") && match.length >= 4) {
+      dayData.push("");
+    } else {
+      dayData.push(match);
+    }
+  });
+
+  const beginIndex = month * 2;
   const endIndex = beginIndex + 1;
 
   const begin = dayData[beginIndex];
